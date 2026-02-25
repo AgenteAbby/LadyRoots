@@ -1258,7 +1258,7 @@
                   },
                   {
                       "parameters":  {
-                                         "jsCode":  "let texto = $json.output || $json.text || $json.texto || \"\";\n\n// Remove o caractere de substituiÃ§Ã£o (ï¿½)\ntexto = texto.replace(/\\uFFFD/g, \"\");\n\n// Remove caracteres de controle\ntexto = texto.replace(/[\\u0000-\\u001F\\u007F]/g, \"\");\n\n// Remove emojis (faixa unicode comum)\ntexto = texto.replace(\n  /[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{26FF}\\u{2700}-\\u{27BF}]/gu,\n  \"\"\n);\n\n// Opcional: remove variaÃ§Ãµes invisÃ­veis (VS16) que aparecem com emojis\ntexto = texto.replace(/\\uFE0F/g, \"\");\n\n// Limpa espaÃ§os extras\ntexto = texto.replace(/[ \\t]+\\n/g, \"\\n\").trim();\n\nreturn [{ json: { texto } }];"
+                                         "jsCode":  "let texto = $json.output || $json.text || $json.texto || \"\";\n\n// Remove o caractere de substituiÃ§Ã£o (ï¿½)\ntexto = texto.replace(/\\uFFFD/g, \"\");\n\n// Remove caracteres de controle (preservando \\n e \\r)\ntexto = texto.replace(/[\\u0000-\\u0009\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, \"\");\n\n// Remove emojis (faixa unicode comum)\ntexto = texto.replace(\n  /[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{26FF}\\u{2700}-\\u{27BF}]/gu,\n  \"\"\n);\n\n// Opcional: remove variaÃ§Ãµes invisÃ­veis (VS16) que aparecem com emojis\ntexto = texto.replace(/\\uFE0F/g, \"\");\n\n// Limpa espaÃ§os extras\ntexto = texto.replace(/[ \\t]+\\n/g, \"\\n\").trim();\n\nreturn [{ json: { texto } }];"
                                      },
                       "type":  "n8n-nodes-base.code",
                       "typeVersion":  2,
