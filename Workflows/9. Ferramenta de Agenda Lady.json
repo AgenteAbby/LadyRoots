@@ -1,0 +1,189 @@
+{
+  "name": "9. Ferramenta de Agenda Lady",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e3176806-3a2d-4c18-9fff-7412f9254202",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('When Executed by Another Workflow').item.json.acao }}",
+              "value2": "consultar_disponibilidade"
+            }
+          ]
+        }
+      },
+      "id": "b0f55346-0c78-47a3-8117-2c5252506334",
+      "name": "Ação Solicitada",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        480,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": ""
+        },
+        "returnAll": true,
+        "options": {
+          "query": "={{ $('When Executed by Another Workflow').item.json.suite }}",
+          "showDeleted": false,
+          "singleEvents": true,
+          "timeMin": "={{ $('When Executed by Another Workflow').item.json.data_inicio }}",
+          "timeMax": "={{ $('When Executed by Another Workflow').item.json.data_fim }}"
+        }
+      },
+      "id": "calendar-search",
+      "name": "Buscar Eventos",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        780,
+        220
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "SUA_CREDENCIAL_AQUI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const eventos = $('Buscar Eventos').all();\nconst dataCheckinReq = new Date($('When Executed by Another Workflow').item.json.data_inicio);\nconst dataCheckoutReq = new Date($('When Executed by Another Workflow').item.json.data_fim);\n\n// Regra de Negócio: Check-out às 10h, Check-in às 14h.\n// Se um evento existente terminar EXATAMENTE no mesmo dia que o check-in solicitado, NÃO é conflito.\n// Se um evento existente começar EXATAMENTE no mesmo dia que o check-out solicitado, NÃO é conflito.\n\nlet temConflito = false;\n\nfor (const item of eventos) {\n  const evt = item.json;\n  if(!evt.start || !evt.end) continue;\n  \n  const evtStart = new Date(evt.start.dateTime || evt.start.date);\n  const evtEnd = new Date(evt.end.dateTime || evt.end.date);\n\n  // Zera horas para verificação apenas de sobreposição de diárias\n  evtStart.setHours(0,0,0,0);\n  evtEnd.setHours(0,0,0,0);\n  dataCheckinReq.setHours(0,0,0,0);\n  dataCheckoutReq.setHours(0,0,0,0);\n\n  // Condição de Conflito Real\n  if (dataCheckinReq < evtEnd && dataCheckoutReq > evtStart) {\n    temConflito = true;\n    break;\n  }\n}\n\n// Prepara a devolução pro LLM\nlet status = temConflito ? 'ocupado' : 'livre';\nlet mensagem = temConflito ? 'Infelizmente a suíte está ocupada nesse período.' : 'A suíte está disponível! Deseja seguir com a pré-reserva?';\n\nreturn [{ json: { status: status, mensagem: mensagem } }];"
+      },
+      "id": "check-availability-code",
+      "name": "Processar Disponibilidade",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": ""
+        },
+        "start": "={{ $now.setZone('America/Sao_Paulo').set( { year: $input.item.json.data_inicio.split('-')[0], month: $input.item.json.data_inicio.split('-')[1], day: $input.item.json.data_inicio.split('-')[2], hour: 14, minute: 0, second: 0 } ).toISO() }}",
+        "end": "={{ $now.setZone('America/Sao_Paulo').set( { year: $input.item.json.data_fim.split('-')[0], month: $input.item.json.data_fim.split('-')[1], day: $input.item.json.data_fim.split('-')[2], hour: 10, minute: 0, second: 0 } ).toISO() }}",
+        "summary": "=⏳ Pré-Reserva: {{ $('When Executed by Another Workflow').item.json.nome_cliente }} - {{ $('When Executed by Another Workflow').item.json.suite }}",
+        "description": "Pré-reserva criada via Agente IA. Aguardando confirmação de pagamento.",
+        "options": {}
+      },
+      "id": "calendar-create",
+      "name": "Criar Pré-Reserva",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        780,
+        480
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "SUA_CREDENCIAL_AQUI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { status: 'sucesso', mensagem: 'A pré-reserva foi criada com sucesso na agenda. O próximo passo é enviar as opções de pagamento (Pix/Cartão) para o cliente efetivar a reserva.', id_evento: $input.item.json.id } }];"
+      },
+      "id": "return-success",
+      "name": "Retornar Confirmação",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        480
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Ação Solicitada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ação Solicitada": {
+      "main": [
+        [
+          {
+            "node": "Buscar Eventos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Pré-Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Eventos": {
+      "main": [
+        [
+          {
+            "node": "Processar Disponibilidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Pré-Reserva": {
+      "main": [
+        [
+          {
+            "node": "Retornar Confirmação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "ec1cffad-3afc-4613-bfdc-afec2eeeb60c",
+  "id": "AGENDA_TOOL_N8N",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "tags": []
+}

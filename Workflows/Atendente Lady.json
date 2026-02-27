@@ -1035,6 +1035,93 @@
                   },
                   {
                       "parameters":  {
+                                         "workflowId":  {
+                                                            "__rl":  true,
+                                                            "value":  "AGENDA_TOOL_N8N",
+                                                            "mode":  "list",
+                                                            "cachedResultName":  "9. Ferramenta de Agenda Lady"
+                                                        },
+                                         "workflowInputs":  {
+                                                                "mappingMode":  "defineBelow",
+                                                                "value":  {
+                                                                              "data_inicio":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027data_inicio\u0027, ``, \u0027string\u0027) }}",
+                                                                              "data_fim":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027data_fim\u0027, ``, \u0027string\u0027) }}",
+                                                                              "suite":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027suite\u0027, ``, \u0027string\u0027) }}",
+                                                                              "nome_cliente":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027nome_cliente\u0027, ``, \u0027string\u0027) }}",
+                                                                              "acao":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027acao\u0027, `consultar_disponibilidade`, \u0027string\u0027) }}"
+                                                                          },
+                                                                "matchingColumns":  [
+                                                                                        "data_inicio",
+                                                                                        "data_fim",
+                                                                                        "suite",
+                                                                                        "acao"
+                                                                                    ],
+                                                                "schema":  [
+                                                                               {
+                                                                                   "id":  "data_inicio",
+                                                                                   "displayName":  "data_inicio",
+                                                                                   "required":  true,
+                                                                                   "defaultMatch":  false,
+                                                                                   "display":  true,
+                                                                                   "canBeUsedToMatch":  true,
+                                                                                   "type":  "string",
+                                                                                   "description": "Ex: 2026-03-10"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "data_fim",
+                                                                                   "displayName":  "data_fim",
+                                                                                   "required":  true,
+                                                                                   "defaultMatch":  false,
+                                                                                   "display":  true,
+                                                                                   "canBeUsedToMatch":  true,
+                                                                                   "type":  "string",
+                                                                                   "description": "Ex: 2026-03-13"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "suite",
+                                                                                   "displayName":  "suite",
+                                                                                   "required":  true,
+                                                                                   "defaultMatch":  false,
+                                                                                   "display":  true,
+                                                                                   "canBeUsedToMatch":  true,
+                                                                                   "type":  "string",
+                                                                                   "description": "O nome da suíte: aventureiro, lagoa azul ou pico do papagaio"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "acao",
+                                                                                   "displayName":  "acao",
+                                                                                   "required":  true,
+                                                                                   "defaultMatch":  false,
+                                                                                   "display":  true,
+                                                                                   "canBeUsedToMatch":  true,
+                                                                                   "type":  "string",
+                                                                                   "description": "Deve ser 'consultar_disponibilidade' ou 'agendar'"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "nome_cliente",
+                                                                                   "displayName":  "nome_cliente",
+                                                                                   "required":  false,
+                                                                                   "defaultMatch":  false,
+                                                                                   "display":  true,
+                                                                                   "canBeUsedToMatch":  true,
+                                                                                   "type":  "string"
+                                                                               }
+                                                                           ],
+                                                                "attemptToConvertTypes":  false,
+                                                                "convertFieldsToString":  false
+                                                            }
+                                     },
+                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
+                      "typeVersion":  2.2,
+                      "position":  [
+                                       -2500,
+                                       -16
+                                   ],
+                      "id":  "agenda-tool-id-1234",
+                      "name":  "agenda_tool"
+                  },
+                  {
+                      "parameters":  {
                                          "resource":  "file",
                                          "operation":  "get",
                                          "owner":  {
@@ -1626,6 +1713,17 @@
                                                                    ]
                                                                ]
                                                },
+                        "agenda_tool":  {
+                                            "ai_tool":  [
+                                                            [
+                                                                {
+                                                                    "node":  "AI Agent",
+                                                                    "type":  "ai_tool",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                        },
                         "Get a file":  {
                                            "main":  [
                                                         [
