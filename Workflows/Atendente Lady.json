@@ -1,1841 +1,1770 @@
-﻿{
-    "name":  "Atendente Lady",
-    "nodes":  [
-                  {
-                      "parameters":  {
-                                         "httpMethod":  "POST",
-                                         "path":  "f6ddc488-8680-4351-84dd-d9e73b2d102d",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.webhook",
-                      "typeVersion":  2,
-                      "position":  [
-                                       -6608,
-                                       -416
-                                   ],
-                      "id":  "3ac0149f-8a22-4686-a096-7d5e6254f8b4",
-                      "name":  "Mensagem recebida",
-                      "webhookId":  "f6ddc488-8680-4351-84dd-d9e73b2d102d"
-                  },
-                  {
-                      "parameters":  {
-                                         "jsCode":  "const ultima_mensagem_da_fila = $input.last()\nconst mensagem_do_workflow = $(\u0027Info\u0027).first()\n\nif (ultima_mensagem_da_fila.json.id_mensagem !== mensagem_do_workflow.json.id_mensagem) {\n  // Mensagem encavalada, para o workflow\n  return [];\n}\n\n// Pass-through da fila de mensagens\nreturn $input.all();"
-                                     },
-                      "type":  "n8n-nodes-base.code",
-                      "typeVersion":  2,
-                      "position":  [
-                                       -4896,
-                                       -432
-                                   ],
-                      "id":  "7ce59de9-e54e-497c-a2a7-576750adff7a",
-                      "name":  "Mensagem encavalada?"
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "select",
-                                         "schema":  {
-                                                        "__rl":  true,
-                                                        "mode":  "list",
-                                                        "value":  "public"
-                                                    },
-                                         "table":  {
-                                                       "__rl":  true,
-                                                       "value":  "n8n_fila_mensagens",
-                                                       "mode":  "list"
-                                                   },
-                                         "returnAll":  true,
-                                         "where":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "column":  "telefone",
-                                                                          "value":  "={{ $(\u0027Info\u0027).item.json.telefone }}"
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "sort":  {
-                                                      "values":  [
-                                                                     {
-                                                                         "column":  "timestamp"
-                                                                     }
-                                                                 ]
-                                                  },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.postgres",
-                      "typeVersion":  2.6,
-                      "position":  [
-                                       -5120,
-                                       -432
-                                   ],
-                      "id":  "64014cd2-7654-41a3-be1b-03a738b216b6",
-                      "name":  "Buscar mensagens",
-                      "credentials":  {
-                                          "postgres":  {
-                                                           "id":  "IbTQCUZTjDnHg7GK",
-                                                           "name":  "Postgres Lady_Roots_V1"
-                                                       }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "deleteTable",
-                                         "schema":  {
-                                                        "__rl":  true,
-                                                        "mode":  "list",
-                                                        "value":  "public"
-                                                    },
-                                         "table":  {
-                                                       "__rl":  true,
-                                                       "value":  "n8n_fila_mensagens",
-                                                       "mode":  "list"
-                                                   },
-                                         "deleteCommand":  "delete",
-                                         "where":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "column":  "telefone",
-                                                                          "value":  "={{ $json.telefone }}"
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.postgres",
-                      "typeVersion":  2.6,
-                      "position":  [
-                                       -4672,
-                                       -432
-                                   ],
-                      "id":  "ba392b64-19b9-4b9c-be95-043099f2880f",
-                      "name":  "Limpar fila de mensagens",
-                      "credentials":  {
-                                          "postgres":  {
-                                                           "id":  "IbTQCUZTjDnHg7GK",
-                                                           "name":  "Postgres Lady_Roots_V1"
-                                                       }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Processando mensagens encavaladas\n\nEssa etapa trata a situaÃ§Ã£o em que o usuÃ¡rio envia mÃºltiplas mensagens seguidas. O ponto negativo Ã© o aumento no tempo de resposta do agente. LÃ³gica dispensa uso de soluÃ§Ãµes mais complexas, como RabbitMQ.\n\nTempo de espera recomendado de ~16s. Quando estiver testando, recomendamos reduzir um pouco para ficar mais rÃ¡pido de testar.\n",
-                                         "height":  540,
-                                         "width":  1080,
-                                         "color":  4
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -5840,
-                                       -624
-                                   ],
-                      "id":  "d27a9e24-82d3-4b4e-bb4e-dbd5c3bd0da5",
-                      "name":  "Sticky Note2"
-                  },
-                  {
-                      "parameters":  {
-                                         "amount":  3
-                                     },
-                      "type":  "n8n-nodes-base.wait",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       -5328,
-                                       -432
-                                   ],
-                      "id":  "27704b2e-b966-40d0-8bd8-61596a9c5b1d",
-                      "name":  "Esperar",
-                      "webhookId":  "689b51a0-89fe-459d-a560-a59c79797611"
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Gerando resposta",
-                                         "height":  812,
-                                         "width":  2080,
-                                         "color":  3
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -3984,
-                                       -624
-                                   ],
-                      "id":  "059419fb-f4ef-4be1-8ec2-37919ecc65d9",
-                      "name":  "Sticky Note3"
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Enviando resposta",
-                                         "height":  508,
-                                         "width":  608,
-                                         "color":  7
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -1872,
-                                       -624
-                                   ],
-                      "id":  "668c84bd-d61b-468b-b9aa-15dfd3943497",
-                      "name":  "Sticky Note4"
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Tratando input\n",
-                                         "height":  540,
-                                         "width":  836
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -6704,
-                                       -624
-                                   ],
-                      "id":  "2b4652f7-488e-4925-905b-1282ccd8ed6f",
-                      "name":  "Sticky Note5"
-                  },
-                  {
-                      "parameters":  {
-                                         "rules":  {
-                                                       "values":  [
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  2
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "leftValue":  "={{ $(\u0027Info\u0027).item.json.id_mensagem }}",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "string",
-                                                                                                                                     "operation":  "notEmpty",
-                                                                                                                                     "singleValue":  true
-                                                                                                                                 },
-                                                                                                                    "id":  "1382cd26-d96e-4c55-99dd-2ca305ffe82e"
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         },
-                                                                          "renameOutput":  true,
-                                                                          "outputKey":  "Texto"
-                                                                      },
-                                                                      {
-                                                                          "conditions":  {
-                                                                                             "options":  {
-                                                                                                             "caseSensitive":  true,
-                                                                                                             "leftValue":  "",
-                                                                                                             "typeValidation":  "strict",
-                                                                                                             "version":  2
-                                                                                                         },
-                                                                                             "conditions":  [
-                                                                                                                {
-                                                                                                                    "id":  "b9a7e16f-b6e4-45d7-846d-92dcb3117593",
-                                                                                                                    "leftValue":  "={{ $(\u0027Info\u0027).item.json.mensagem_de_audio }}",
-                                                                                                                    "rightValue":  "",
-                                                                                                                    "operator":  {
-                                                                                                                                     "type":  "boolean",
-                                                                                                                                     "operation":  "true",
-                                                                                                                                     "singleValue":  true
-                                                                                                                                 }
-                                                                                                                }
-                                                                                                            ],
-                                                                                             "combinator":  "and"
-                                                                                         },
-                                                                          "renameOutput":  true,
-                                                                          "outputKey":  "Ãudio"
-                                                                      }
-                                                                  ]
-                                                   },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.switch",
-                      "typeVersion":  3.2,
-                      "position":  [
-                                       -5776,
-                                       -416
-                                   ],
-                      "id":  "dde9d891-cfe1-4b16-8895-8a5451493690",
-                      "name":  "Tipo de mensagem"
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Processando Ã¡udio",
-                                         "height":  420,
-                                         "width":  1080,
-                                         "color":  6
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -5824,
-                                       -64
-                                   ],
-                      "id":  "e8e22be8-db6f-4dc6-97d7-e83b0a8a2413",
-                      "name":  "Sticky Note6"
-                  },
-                  {
-                      "parameters":  {
-                                         "sseEndpoint":  "=https://chat.abbyai.run/mcp/db6bc79d-ba32-41c4-b492-f0f5bbcb8fd3/sse",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.mcpClientTool",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -2944,
-                                       -16
-                                   ],
-                      "id":  "3083486c-df0e-421a-a430-6faaaa400bba",
-                      "name":  "MCP Google Calendar"
-                  },
-                  {
-                      "parameters":  {
-                                         "resource":  "fileFolder",
-                                         "returnAll":  true,
-                                         "filter":  {
-                                                        "folderId":  {
-                                                                         "__rl":  true,
-                                                                         "value":  "1Y3X6dl4oAXD2HbpMab6IBvRd3LOjoTsg",
-                                                                         "mode":  "list",
-                                                                         "cachedResultName":  "Files",
-                                                                         "cachedResultUrl":  "https://drive.google.com/drive/folders/1Y3X6dl4oAXD2HbpMab6IBvRd3LOjoTsg"
-                                                                     }
-                                                    },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.googleDriveTool",
-                      "typeVersion":  3,
-                      "position":  [
-                                       -2592,
-                                       -16
-                                   ],
-                      "id":  "b9722798-977e-4ca6-bce6-ea5de4231412",
-                      "name":  "Listar arquivos",
-                      "credentials":  {
-                                          "googleDriveOAuth2Api":  {
-                                                                       "id":  "ApdPG8qi1C0zQjbO",
-                                                                       "name":  "Google Drive Lady Roots"
-                                                                   }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "description":  "Use essa ferramenta para baixar um arquivo do Google Drive e enviÃ¡-lo para o usuÃ¡rio.\n",
-                                         "workflowId":  {
-                                                            "__rl":  true,
-                                                            "value":  "b6q39LPDSqsvzCYk",
-                                                            "mode":  "list",
-                                                            "cachedResultUrl":  "/workflow/b6q39LPDSqsvzCYk",
-                                                            "cachedResultName":  "3. Baixar e enviar arquivo do Google Drive"
-                                                        },
-                                         "workflowInputs":  {
-                                                                "mappingMode":  "defineBelow",
-                                                                "value":  {
-                                                                              "file_id":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027file_id\u0027, ``, \u0027string\u0027) }}",
-                                                                              "id_conta":  "={{ $(\u0027Info\u0027).item.json.id_conta }}",
-                                                                              "id_conversa":  "={{ $(\u0027Info\u0027).item.json.id_conversa }}",
-                                                                              "url_chatwoot":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}"
-                                                                          },
-                                                                "matchingColumns":  [
-                                                                                        "file_id"
-                                                                                    ],
-                                                                "schema":  [
-                                                                               {
-                                                                                   "id":  "file_id",
-                                                                                   "displayName":  "file_id",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               },
-                                                                               {
-                                                                                   "id":  "id_conta",
-                                                                                   "displayName":  "id_conta",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               },
-                                                                               {
-                                                                                   "id":  "id_conversa",
-                                                                                   "displayName":  "id_conversa",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               },
-                                                                               {
-                                                                                   "id":  "url_chatwoot",
-                                                                                   "displayName":  "url_chatwoot",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               }
-                                                                           ],
-                                                                "attemptToConvertTypes":  false,
-                                                                "convertFieldsToString":  false
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
-                      "typeVersion":  2.2,
-                      "position":  [
-                                       -2448,
-                                       -16
-                                   ],
-                      "id":  "190c441f-ab29-46a0-82c2-816d601073be",
-                      "name":  "Baixar e enviar arquivo"
-                  },
-                  {
-                      "parameters":  {
-                                         "content":  "# Marcar como lida e \"digitando...\"",
-                                         "height":  540,
-                                         "width":  724,
-                                         "color":  5
-                                     },
-                      "type":  "n8n-nodes-base.stickyNote",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -4736,
-                                       -624
-                                   ],
-                      "id":  "1ce973bb-919a-420e-90d7-6baf50b582c8",
-                      "name":  "Sticky Note12"
-                  },
-                  {
-                      "parameters":  {
-                                         "chatId":  "={{ $(\u0027Info\u0027).item.json.telegram_chat_id }}",
-                                         "text":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027Text\u0027, ``, \u0027string\u0027) }}",
-                                         "additionalFields":  {
-                                                                  "parse_mode":  "MarkdownV2"
-                                                              }
-                                     },
-                      "type":  "n8n-nodes-base.telegramTool",
-                      "typeVersion":  1.2,
-                      "position":  [
-                                       -2304,
-                                       -16
-                                   ],
-                      "id":  "c90ef785-9ab6-4903-a0a9-2f93cc470dc0",
-                      "name":  "Enviar alerta de cancelamento",
-                      "webhookId":  "487b54cb-d0a4-492c-847c-3157e0fd7aa0",
-                      "credentials":  {
-                                          "telegramApi":  {
-                                                              "id":  "Yd3Fi9Z87TxPwguH",
-                                                              "name":  "Telegram account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "sessionIdType":  "customKey",
-                                         "sessionKey":  "={{ $(\u0027Info\u0027).item.json.telefone }}",
-                                         "tableName":  "n8n_historico_mensagens",
-                                         "contextWindowLength":  25
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.memoryPostgresChat",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -3760,
-                                       -16
-                                   ],
-                      "id":  "5f253718-171a-4712-8028-5d74d3386850",
-                      "name":  "Memory",
-                      "credentials":  {
-                                          "postgres":  {
-                                                           "id":  "IbTQCUZTjDnHg7GK",
-                                                           "name":  "Postgres Lady_Roots_V1"
-                                                       }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "description":  "Use a ferramenta para refletir sobre algo. Ela nÃ£o obterÃ¡ novas informaÃ§Ãµes nem alterarÃ¡ o banco de dados, apenas adicionarÃ¡ o pensamento ao registro. Use-a quando for necessÃ¡rio um raciocÃ­nio complexo ou alguma memÃ³ria em cache."
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolThink",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -3616,
-                                       -16
-                                   ],
-                      "id":  "d925218b-8868-4b44-b687-e92656e07909",
-                      "name":  "Refletir"
-                  },
-                  {
-                      "parameters":  {
-                                         "method":  "POST",
-                                         "url":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}/api/v1/accounts/{{ $(\u0027Info\u0027).item.json.id_conta }}/conversations/{{ $(\u0027Info\u0027).item.json.id_conversa }}/update_last_seen",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "sendBody":  true,
-                                         "bodyParameters":  {
-                                                                "parameters":  [
-                                                                                   {
-
-                                                                                   }
-                                                                               ]
-                                                            },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.httpRequest",
-                      "typeVersion":  4.2,
-                      "position":  [
-                                       -4432,
-                                       -432
-                                   ],
-                      "id":  "4020520f-c46a-4950-8b03-a4754ae762c7",
-                      "name":  "Marcar como lidas",
-                      "credentials":  {
-                                          "httpHeaderAuth":  {
-                                                                 "id":  "YH1wJz5zpk9dKSUe",
-                                                                 "name":  "Header Auth account"
-                                                             },
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "method":  "POST",
-                                         "url":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}/api/v1/accounts/{{ $(\u0027Info\u0027).item.json.id_conta }}/conversations/{{ $(\u0027Info\u0027).item.json.id_conversa }}/toggle_typing_status",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "sendBody":  true,
-                                         "bodyParameters":  {
-                                                                "parameters":  [
-                                                                                   {
-                                                                                       "name":  "typing_status",
-                                                                                       "value":  "={{ $(\u0027Info\u0027).item.json.mensagem_de_audio ? \u0027recording\u0027 : \u0027on\u0027 }}"
-                                                                                   }
-                                                                               ]
-                                                            },
-                                         "options":  {
-                                                         "response":  {
-                                                                          "response":  {
-                                                                                           "responseFormat":  "text"
-                                                                                       }
-                                                                      }
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.httpRequest",
-                      "typeVersion":  4.2,
-                      "position":  [
-                                       -4208,
-                                       -432
-                                   ],
-                      "id":  "6686b2c5-806f-4a0e-be80-eb9aef3e97fb",
-                      "name":  "Digitando/Gravando...",
-                      "credentials":  {
-                                          "httpHeaderAuth":  {
-                                                                 "id":  "YH1wJz5zpk9dKSUe",
-                                                                 "name":  "Header Auth account"
-                                                             },
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "7eab8669-6929-4dc6-b3e2-943065bc306c",
-                                                                                     "name":  "mensagem",
-                                                                                     "value":  "={{ $(\u0027Info\u0027).item.json.mensagem ? $(\u0027Mensagem encavalada?\u0027).all().map(info =\u003e info.json.mensagem).join(\u0027\\\\n\u0027) : \u0027\u0027 }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "676d14ec-72d3-4970-9fa0-5e39ff976011",
-                                                                                     "name":  "mensagem_audio",
-                                                                                     "value":  "={{ $(\u0027Info\u0027).item.json.mensagem_de_audio ? $(\u0027Transcrever audio\u0027).item.json.text : \u0027\u0027 }}",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -3904,
-                                       -432
-                                   ],
-                      "id":  "8c7bfe16-6022-448a-9b3c-ca154b57256a",
-                      "name":  "Set mensagens",
-                      "executeOnce":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "url":  "={{\n  $(\u0027Info\u0027).item.json.url_chatwoot.replace(/\\/$/, \u0027\u0027) + $(\u0027Mensagem recebida\u0027).item.json.body.attachments[0].data_url.replace(/^https?:\\/\\/[^/]+/, \u0027\u0027).replace(/^http:\\/\\//, \u0027\u0027)\n}}\n",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.httpRequest",
-                      "typeVersion":  4.2,
-                      "position":  [
-                                       -5712,
-                                       96
-                                   ],
-                      "id":  "7dff49d7-2a6d-4cca-a5a5-2bb7f0acef0f",
-                      "name":  "Download Ã¡udio",
-                      "credentials":  {
-                                          "httpHeaderAuth":  {
-                                                                 "id":  "YH1wJz5zpk9dKSUe",
-                                                                 "name":  "Header Auth account"
-                                                             },
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "binaryToPropery",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.extractFromFile",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -5440,
-                                       96
-                                   ],
-                      "id":  "741e85d3-a824-4258-8c34-c40a1f3b58b8",
-                      "name":  "Extract from File"
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "toBinary",
-                                         "sourceProperty":  "data",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.convertToFile",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       -5168,
-                                       96
-                                   ],
-                      "id":  "f62e257d-d74a-436a-8ea1-f1dcdf217178",
-                      "name":  "Convert to File"
-                  },
-                  {
-                      "parameters":  {
-                                         "method":  "POST",
-                                         "url":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}/api/v1/accounts/{{ $(\u0027Info\u0027).item.json.id_conta }}/conversations/{{ $(\u0027Info\u0027).item.json.id_conversa }}/toggle_typing_status",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "sendBody":  true,
-                                         "bodyParameters":  {
-                                                                "parameters":  [
-                                                                                   {
-                                                                                       "name":  "typing_status",
-                                                                                       "value":  "off"
-                                                                                   }
-                                                                               ]
-                                                            },
-                                         "options":  {
-                                                         "response":  {
-                                                                          "response":  {
-                                                                                           "responseFormat":  "text"
-                                                                                       }
-                                                                      }
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.httpRequest",
-                      "typeVersion":  4.2,
-                      "position":  [
-                                       -1792,
-                                       -432
-                                   ],
-                      "id":  "c5384520-5955-4db8-aada-f1c5385db738",
-                      "name":  "Resetar status",
-                      "credentials":  {
-                                          "httpHeaderAuth":  {
-                                                                 "id":  "YH1wJz5zpk9dKSUe",
-                                                                 "name":  "Header Auth account"
-                                                             },
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "method":  "POST",
-                                         "url":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}/api/v1/accounts/{{ $(\u0027Info\u0027).item.json.id_conta }}/conversations/{{ $(\u0027Info\u0027).item.json.id_conversa }}/messages",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "sendBody":  true,
-                                         "bodyParameters":  {
-                                                                "parameters":  [
-                                                                                   {
-                                                                                       "name":  "content",
-                                                                                       "value":  "={{ $(\u0027Formatar texto\u0027).item.json.texto }}"
-                                                                                   }
-                                                                               ]
-                                                            },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.httpRequest",
-                      "typeVersion":  4.2,
-                      "position":  [
-                                       -1488,
-                                       -432
-                                   ],
-                      "id":  "0ae63d99-d0e3-440b-a37d-eaa8e4f12c69",
-                      "name":  "Enviar texto.",
-                      "credentials":  {
-                                          "httpHeaderAuth":  {
-                                                                 "id":  "YH1wJz5zpk9dKSUe",
-                                                                 "name":  "Header Auth account"
-                                                             },
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "c8fd010d-6096-4a50-b3e2-e9fe26661840",
-                                                                                     "name":  "id_mensagem",
-                                                                                     "value":  "={{ $json.body.id }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "1b513343-9b6a-4f6e-a012-ed819bf34a31",
-                                                                                     "name":  "id_conta",
-                                                                                     "value":  "={{ $json.body.account.id }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "05c14b9a-5f27-465a-a047-71553826bd7a",
-                                                                                     "name":  "id_conversa",
-                                                                                     "value":  "={{ $json.body.conversation.id }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "8bf522a6-75fb-434a-854c-b736539309e1",
-                                                                                     "name":  "telefone",
-                                                                                     "value":  "={{ $json.body.sender.phone_number }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "0d622a33-f313-4758-a764-fa6cbf2b0587",
-                                                                                     "name":  "mensagem",
-                                                                                     "value":  "={{ $json.body.content || \u0027\u0027 }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "8f4b9d84-56e0-4f45-9f17-68c53f365f43",
-                                                                                     "name":  "mensagem_de_audio",
-                                                                                     "value":  "={{ $json.body.attachments?.[0]?.meta?.is_recorded_audio || false }}",
-                                                                                     "type":  "boolean"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "2b679a3f-788f-4cd2-88d5-4f03af68f224",
-                                                                                     "name":  "timestamp",
-                                                                                     "value":  "={{ $json.body.created_at }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "24caf88e-74ce-43ab-8dc4-1fff471b706f",
-                                                                                     "name":  "tipo",
-                                                                                     "value":  "={{ $json.body.message_type }}",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "573669d2-1e43-4010-8c82-a67459ffe1db",
-                                                                                     "name":  "etiquetas",
-                                                                                     "value":  "={{ $json.body.conversation.labels }}",
-                                                                                     "type":  "array"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "40ff895f-f63f-4e4f-bba3-c7d803c277f1",
-                                                                                     "name":  "url_chatwoot",
-                                                                                     "value":  "https://chatwoot.abbyai.run",
-                                                                                     "type":  "string"
-                                                                                 },
-                                                                                 {
-                                                                                     "id":  "cf71dea1-d585-4235-8f05-29bc5f82b5df",
-                                                                                     "name":  "telegram_chat_id",
-                                                                                     "value":  "1623280716",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -6336,
-                                       -416
-                                   ],
-                      "id":  "627cdb8a-f9ae-414f-b001-a045cdc51bef",
-                      "name":  "Info"
-                  },
-                  {
-                      "parameters":  {
-                                         "description":  "Chame essa ferramenta para direcionar o atendimento para o gestor responsÃ¡vel.",
-                                         "workflowId":  {
-                                                            "__rl":  true,
-                                                            "value":  "kLki6pHXMlZ41oUH",
-                                                            "mode":  "list",
-                                                            "cachedResultUrl":  "/workflow/kLki6pHXMlZ41oUH",
-                                                            "cachedResultName":  "4. Escalar humano"
-                                                        },
-                                         "workflowInputs":  {
-                                                                "mappingMode":  "defineBelow",
-                                                                "value":  {
-                                                                              "telefone":  "={{ $(\u0027Info\u0027).item.json.telefone }}",
-                                                                              "nome":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027nome\u0027, ``, \u0027string\u0027) }}",
-                                                                              "ultima_mensagem":  "={{ $(\u0027Set mensagens\u0027).item.json.mensagem || $(\u0027Set mensagens\u0027).item.json.mensagem_audio }}",
-                                                                              "id_conta":  "={{ $(\u0027Info\u0027).item.json.id_conta }}",
-                                                                              "id_conversa":  "={{ $(\u0027Info\u0027).item.json.id_conversa }}",
-                                                                              "telegram_chat_id":  "={{ $(\u0027Info\u0027).item.json.telegram_chat_id }}",
-                                                                              "url_chatwoot":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot }}"
-                                                                          },
-                                                                "matchingColumns":  [
-
-                                                                                    ],
-                                                                "schema":  [
-                                                                               {
-                                                                                   "id":  "telefone",
-                                                                                   "displayName":  "telefone",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "nome",
-                                                                                   "displayName":  "nome",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "ultima_mensagem",
-                                                                                   "displayName":  "ultima_mensagem",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "id_conta",
-                                                                                   "displayName":  "id_conta",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "id_conversa",
-                                                                                   "displayName":  "id_conversa",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "telegram_chat_id",
-                                                                                   "displayName":  "telegram_chat_id",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               },
-                                                                               {
-                                                                                   "id":  "url_chatwoot",
-                                                                                   "displayName":  "url_chatwoot",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               }
-                                                                           ],
-                                                                "attemptToConvertTypes":  false,
-                                                                "convertFieldsToString":  false
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
-                      "typeVersion":  2.2,
-                      "position":  [
-                                       -2160,
-                                       -16
-                                   ],
-                      "id":  "1a451a6d-4613-469a-b12d-f181125fed56",
-                      "name":  "Escalar humano"
-                  },
-                  {
-                      "parameters":  {
-                                         "resource":  "audio",
-                                         "operation":  "transcribe",
-                                         "options":  {
-                                                         "language":  "pt"
-                                                     }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.openAi",
-                      "typeVersion":  1.8,
-                      "position":  [
-                                       -4928,
-                                       96
-                                   ],
-                      "id":  "2c7c9060-3da4-405f-add8-76be6a5808a0",
-                      "name":  "Transcrever audio",
-                      "credentials":  {
-                                          "openAiApi":  {
-                                                            "id":  "Ll562DreZPSEn57a",
-                                                            "name":  "OpenAi account NaveRealengo"
-                                                        }
-                                      },
-                      "disabled":  true
-                  },
-                  {
-                      "parameters":  {
-                                         "workflowId":  {
-                                                            "__rl":  true,
-                                                            "value":  "vX8CTbvy4wm3gI37",
-                                                            "mode":  "list",
-                                                            "cachedResultUrl":  "/workflow/vX8CTbvy4wm3gI37",
-                                                            "cachedResultName":  "8. Agente de Consulta"
-                                                        },
-                                         "workflowInputs":  {
-                                                                "mappingMode":  "defineBelow",
-                                                                "value":  {
-                                                                              "pergunta_usuario":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027pergunta_usuario\u0027, ``, \u0027string\u0027) }}",
-                                                                              "tipo_busca":  "curso"
-                                                                          },
-                                                                "matchingColumns":  [
-                                                                                        "pergunta_usuario"
-                                                                                    ],
-                                                                "schema":  [
-                                                                               {
-                                                                                   "id":  "pergunta_usuario",
-                                                                                   "displayName":  "pergunta_usuario",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               }
-                                                                           ],
-                                                                "attemptToConvertTypes":  false,
-                                                                "convertFieldsToString":  false
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
-                      "typeVersion":  2.2,
-                      "position":  [
-                                       -3072,
-                                       -16
-                                   ],
-                      "id":  "3879e702-6ffb-4c7f-8a13-b1477ceaafe0",
-                      "name":  "consulta_site"
-                  },
-                  {
-                      "parameters":  {
-                                         "workflowId":  {
-                                                            "__rl":  true,
-                                                            "value":  "vX8CTbvy4wm3gI37",
-                                                            "mode":  "list",
-                                                            "cachedResultUrl":  "/workflow/vX8CTbvy4wm3gI37",
-                                                            "cachedResultName":  "8. Agente de Consulta"
-                                                        },
-                                         "workflowInputs":  {
-                                                                "mappingMode":  "defineBelow",
-                                                                "value":  {
-                                                                              "pergunta_usuario":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027pergunta_usuario\u0027, ``, \u0027string\u0027) }}",
-                                                                              "tipo_busca":  "institucional"
-                                                                          },
-                                                                "matchingColumns":  [
-                                                                                        "pergunta_usuario"
-                                                                                    ],
-                                                                "schema":  [
-                                                                               {
-                                                                                   "id":  "pergunta_usuario",
-                                                                                   "displayName":  "pergunta_usuario",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "removed":  false
-                                                                               }
-                                                                           ],
-                                                                "attemptToConvertTypes":  false,
-                                                                "convertFieldsToString":  false
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
-                      "typeVersion":  2.2,
-                      "position":  [
-                                       -2736,
-                                       -16
-                                   ],
-                      "id":  "33f342d1-e245-446a-89cb-4b492b209d17",
-                      "name":  "consulta_instagram"
-                  },
-                  {
-                      "parameters":  {
-                                         "workflowId":  {
-                                                            "__rl":  true,
-                                                            "value":  "AGENDA_TOOL_N8N",
-                                                            "mode":  "list",
-                                                            "cachedResultName":  "9. Ferramenta de Agenda Lady"
-                                                        },
-                                         "workflowInputs":  {
-                                                                "mappingMode":  "defineBelow",
-                                                                "value":  {
-                                                                              "data_inicio":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027data_inicio\u0027, ``, \u0027string\u0027) }}",
-                                                                              "data_fim":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027data_fim\u0027, ``, \u0027string\u0027) }}",
-                                                                              "suite":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027suite\u0027, ``, \u0027string\u0027) }}",
-                                                                              "nome_cliente":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027nome_cliente\u0027, ``, \u0027string\u0027) }}",
-                                                                              "acao":  "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI(\u0027acao\u0027, `consultar_disponibilidade`, \u0027string\u0027) }}"
-                                                                          },
-                                                                "matchingColumns":  [
-                                                                                        "data_inicio",
-                                                                                        "data_fim",
-                                                                                        "suite",
-                                                                                        "acao"
-                                                                                    ],
-                                                                "schema":  [
-                                                                               {
-                                                                                   "id":  "data_inicio",
-                                                                                   "displayName":  "data_inicio",
-                                                                                   "required":  true,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "description": "Ex: 2026-03-10"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "data_fim",
-                                                                                   "displayName":  "data_fim",
-                                                                                   "required":  true,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "description": "Ex: 2026-03-13"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "suite",
-                                                                                   "displayName":  "suite",
-                                                                                   "required":  true,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "description": "O nome da suíte: aventureiro, lagoa azul ou pico do papagaio"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "acao",
-                                                                                   "displayName":  "acao",
-                                                                                   "required":  true,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string",
-                                                                                   "description": "Deve ser 'consultar_disponibilidade' ou 'agendar'"
-                                                                               },
-                                                                               {
-                                                                                   "id":  "nome_cliente",
-                                                                                   "displayName":  "nome_cliente",
-                                                                                   "required":  false,
-                                                                                   "defaultMatch":  false,
-                                                                                   "display":  true,
-                                                                                   "canBeUsedToMatch":  true,
-                                                                                   "type":  "string"
-                                                                               }
-                                                                           ],
-                                                                "attemptToConvertTypes":  false,
-                                                                "convertFieldsToString":  false
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolWorkflow",
-                      "typeVersion":  2.2,
-                      "position":  [
-                                       -2500,
-                                       -16
-                                   ],
-                      "id":  "agenda-tool-id-1234",
-                      "name":  "agenda_tool"
-                  },
-                  {
-                      "parameters":  {
-                                         "resource":  "file",
-                                         "operation":  "get",
-                                         "owner":  {
-                                                       "__rl":  true,
-                                                       "value":  "AgenteAbby",
-                                                       "mode":  "list",
-                                                       "cachedResultName":  "AgenteAbby",
-                                                       "cachedResultUrl":  "https://github.com/AgenteAbby"
-                                                   },
-                                         "repository":  {
-                                                            "__rl":  true,
-                                                            "value":  "LadyRoots",
-                                                            "mode":  "list",
-                                                            "cachedResultName":  "LadyRoots",
-                                                            "cachedResultUrl":  "https://github.com/AgenteAbby/LadyRoots"
-                                                        },
-                                         "filePath":  "Prompt_Lady_Roots_Humanizado.md",
-                                         "additionalParameters":  {
-
-                                                                  }
-                                     },
-                      "type":  "n8n-nodes-base.github",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       -3664,
-                                       -432
-                                   ],
-                      "id":  "934cd69a-853e-4802-8038-5d1cd3dc3787",
-                      "name":  "Get a file",
-                      "webhookId":  "8c20f800-28ef-4711-ab25-436ede4684a9",
-                      "credentials":  {
-                                          "githubApi":  {
-                                                            "id":  "68dRPQIO6Hk0P7wD",
-                                                            "name":  "GitHub account"
-                                                        }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "operation":  "text",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.extractFromFile",
-                      "typeVersion":  1,
-                      "position":  [
-                                       -3440,
-                                       -432
-                                   ],
-                      "id":  "f0491c77-9ba5-4014-a84d-9abf91dd3e09",
-                      "name":  "Extract from File1"
-                  },
-                  {
-                      "parameters":  {
-                                         "assignments":  {
-                                                             "assignments":  [
-                                                                                 {
-                                                                                     "id":  "377d9293-37f4-4623-a44e-9b318968b2e4",
-                                                                                     "name":  "data_hoje",
-                                                                                     "value":  "={{$now.setZone(\u0027America/Sao_Paulo\u0027).toFormat(\"dd/MM/yyyy HH:mm:ss\")}}",
-                                                                                     "type":  "string"
-                                                                                 }
-                                                                             ]
-                                                         },
-                                         "includeOtherFields":  true,
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.set",
-                      "typeVersion":  3.4,
-                      "position":  [
-                                       -3232,
-                                       -432
-                                   ],
-                      "id":  "95915d36-6c6f-47bb-89f5-1ca9580ad6f9",
-                      "name":  "Data \u0026 Hora"
-                  },
-                  {
-                      "parameters":  {
-                                         "schema":  {
-                                                        "__rl":  true,
-                                                        "mode":  "list",
-                                                        "value":  "public"
-                                                    },
-                                         "table":  {
-                                                       "__rl":  true,
-                                                       "value":  "n8n_fila_mensagens",
-                                                       "mode":  "list",
-                                                       "cachedResultName":  "n8n_fila_mensagens"
-                                                   },
-                                         "columns":  {
-                                                         "mappingMode":  "defineBelow",
-                                                         "value":  {
-                                                                       "id_mensagem":  "={{ $(\u0027Info\u0027).item.json.id_mensagem }}",
-                                                                       "telefone":  "={{ $(\u0027Info\u0027).item.json.telefone }}",
-                                                                       "mensagem":  "={{ $(\u0027Info\u0027).item.json.mensagem }}",
-                                                                       "timestamp":  "={{ $(\u0027Info\u0027).item.json.timestamp.toDateTime() }}"
-                                                                   },
-                                                         "matchingColumns":  [
-                                                                                 "id"
-                                                                             ],
-                                                         "schema":  [
-                                                                        {
-                                                                            "id":  "id",
-                                                                            "displayName":  "id",
-                                                                            "required":  false,
-                                                                            "defaultMatch":  true,
-                                                                            "display":  true,
-                                                                            "type":  "number",
-                                                                            "canBeUsedToMatch":  true,
-                                                                            "removed":  true
-                                                                        },
-                                                                        {
-                                                                            "id":  "id_mensagem",
-                                                                            "displayName":  "id_mensagem",
-                                                                            "required":  true,
-                                                                            "defaultMatch":  false,
-                                                                            "display":  true,
-                                                                            "type":  "string",
-                                                                            "canBeUsedToMatch":  true
-                                                                        },
-                                                                        {
-                                                                            "id":  "telefone",
-                                                                            "displayName":  "telefone",
-                                                                            "required":  true,
-                                                                            "defaultMatch":  false,
-                                                                            "display":  true,
-                                                                            "type":  "string",
-                                                                            "canBeUsedToMatch":  true
-                                                                        },
-                                                                        {
-                                                                            "id":  "mensagem",
-                                                                            "displayName":  "mensagem",
-                                                                            "required":  true,
-                                                                            "defaultMatch":  false,
-                                                                            "display":  true,
-                                                                            "type":  "string",
-                                                                            "canBeUsedToMatch":  true
-                                                                        },
-                                                                        {
-                                                                            "id":  "timestamp",
-                                                                            "displayName":  "timestamp",
-                                                                            "required":  true,
-                                                                            "defaultMatch":  false,
-                                                                            "display":  true,
-                                                                            "type":  "dateTime",
-                                                                            "canBeUsedToMatch":  true
-                                                                        }
-                                                                    ],
-                                                         "attemptToConvertTypes":  false,
-                                                         "convertFieldsToString":  false
-                                                     },
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.postgres",
-                      "typeVersion":  2.6,
-                      "position":  [
-                                       -5536,
-                                       -432
-                                   ],
-                      "id":  "671ea873-3a81-4d21-913f-d5f796230262",
-                      "name":  "Enfileirar mensagem",
-                      "credentials":  {
-                                          "postgres":  {
-                                                           "id":  "IbTQCUZTjDnHg7GK",
-                                                           "name":  "Postgres Lady_Roots_V1"
-                                                       }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "model":  {
-                                                       "__rl":  true,
-                                                       "value":  "gpt-4.1-nano",
-                                                       "mode":  "list",
-                                                       "cachedResultName":  "gpt-4.1-nano"
-                                                   },
-                                         "responsesApiEnabled":  false,
-                                         "options":  {
-                                                         "frequencyPenalty":  0.2,
-                                                         "maxTokens":  900,
-                                                         "temperature":  0.7,
-                                                         "topP":  1
-                                                     }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-                      "typeVersion":  1.3,
-                      "position":  [
-                                       -3904,
-                                       -16
-                                   ],
-                      "id":  "2d0902f6-20a6-4146-86ab-943e56616f2e",
-                      "name":  "OpenAI Chat Model",
-                      "credentials":  {
-                                          "openAiApi":  {
-                                                            "id":  "Ll562DreZPSEn57a",
-                                                            "name":  "OpenAi account NaveRealengo"
-                                                        }
-                                      }
-                  },
-                  {
-                      "parameters":  {
-                                         "promptType":  "define",
-                                         "text":  "=={{ $json.data }}\n={{ $json.data_hoje }}\n={{ $(\u0027Set mensagens\u0027).item.json.mensagem || $(\u0027Set mensagens\u0027).item.json.mensagem_audio }}",
-                                         "options":  {
-                                                         "systemMessage":  "{{ $json.data }}"
-                                                     }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.agent",
-                      "typeVersion":  3.1,
-                      "position":  [
-                                       -2976,
-                                       -432
-                                   ],
-                      "id":  "93f5b4ab-2d4d-4fca-81d6-87fbfe0dd799",
-                      "name":  "AI Agent"
-                  },
-                  {
-                      "parameters":  {
-                                         "jsCode":  "let texto = $json.output || $json.text || $json.texto || \"\";\n\n// Remove o caractere de substituiÃ§Ã£o (ï¿½)\ntexto = texto.replace(/\\uFFFD/g, \"\");\n\n// Remove caracteres de controle (preservando \\n e \\r)\ntexto = texto.replace(/[\\u0000-\\u0009\\u000B\\u000C\\u000E-\\u001F\\u007F]/g, \"\");\n\n// Remove emojis (faixa unicode comum)\ntexto = texto.replace(\n  /[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{26FF}\\u{2700}-\\u{27BF}]/gu,\n  \"\"\n);\n\n// Opcional: remove variaÃ§Ãµes invisÃ­veis (VS16) que aparecem com emojis\ntexto = texto.replace(/\\uFE0F/g, \"\");\n\n// Limpa espaÃ§os extras\ntexto = texto.replace(/[ \\t]+\\n/g, \"\\n\").trim();\n\nreturn [{ json: { texto } }];"
-                                     },
-                      "type":  "n8n-nodes-base.code",
-                      "typeVersion":  2,
-                      "position":  [
-                                       -2320,
-                                       -432
-                                   ],
-                      "id":  "85cbf2f6-1f69-46d6-a568-8d81385f6523",
-                      "name":  "Formatar texto"
-                  },
-                  {
-                      "parameters":  {
-                                         "conditions":  {
-                                                            "options":  {
-                                                                            "caseSensitive":  true,
-                                                                            "leftValue":  "",
-                                                                            "typeValidation":  "strict",
-                                                                            "version":  3
-                                                                        },
-                                                            "conditions":  [
-                                                                               {
-                                                                                   "id":  "976ae1fe-d155-40d0-a5e6-a2552e869658",
-                                                                                   "leftValue":  "={{ $json.tipo === \u0027incoming\u0027 }}",
-                                                                                   "rightValue":  "",
-                                                                                   "operator":  {
-                                                                                                    "type":  "boolean",
-                                                                                                    "operation":  "true",
-                                                                                                    "singleValue":  true
-                                                                                                }
-                                                                               },
-                                                                               {
-                                                                                   "id":  "d0ce738d-77ab-42c4-8fed-e4fa43a3444a",
-                                                                                   "leftValue":  "={{ !$json.etiquetas?.includes(\u0027agente-off\u0027) }}",
-                                                                                   "rightValue":  "",
-                                                                                   "operator":  {
-                                                                                                    "type":  "boolean",
-                                                                                                    "operation":  "true",
-                                                                                                    "singleValue":  true
-                                                                                                }
-                                                                               }
-                                                                           ],
-                                                            "combinator":  "and"
-                                                        },
-                                         "looseTypeValidation":  "={{ $json.mensagem_de_audio === true }}",
-                                         "options":  {
-
-                                                     }
-                                     },
-                      "type":  "n8n-nodes-base.filter",
-                      "typeVersion":  2.3,
-                      "position":  [
-                                       -6048,
-                                       -416
-                                   ],
-                      "id":  "299eb6fb-0f69-43b0-9b9e-c0e7e074f66d",
-                      "name":  "Mensagem chegando2?"
-                  },
-                  {
-                      "parameters":  {
-                                         "toolDescription":  "Envia uma mensagem de reaÃ§Ã£o como resposta a uma mensagem do usuÃ¡rio. ReaÃ§Ã£o Ã© sempre um emoji.",
-                                         "method":  "POST",
-                                         "url":  "={{ $(\u0027Info\u0027).item.json.url_chatwoot + \u0027/api/v1/accounts/\u0027 + $(\u0027Info\u0027).item.json.id_conta + \u0027/conversations/\u0027 + $(\u0027Info\u0027).item.json.id_conversa + \u0027/messages\u0027 }}",
-                                         "authentication":  "predefinedCredentialType",
-                                         "nodeCredentialType":  "chatwootApi",
-                                         "sendBody":  true,
-                                         "parametersBody":  {
-                                                                "values":  [
-                                                                               {
-                                                                                   "name":  "content_attributes",
-                                                                                   "valueProvider":  "fieldValue",
-                                                                                   "value":  "={{ JSON.stringify({ \"in_reply_to\": Number($(\u0027Info\u0027).item.json.id_mensagem), \"is_reaction\": true }) }}"
-                                                                               },
-                                                                               {
-                                                                                   "name":  "content",
-                                                                                   "valueProvider":  "fromAI"
-                                                                               }
-                                                                           ]
-                                                            }
-                                     },
-                      "type":  "@n8n/n8n-nodes-langchain.toolHttpRequest",
-                      "typeVersion":  1.1,
-                      "position":  [
-                                       -3232,
-                                       -16
-                                   ],
-                      "id":  "e60195db-f846-476a-bd52-e3d1b1b945aa",
-                      "name":  "Reagir mensagem",
-                      "credentials":  {
-                                          "chatwootApi":  {
-                                                              "id":  "OsAo4ov6JZp0l9SX",
-                                                              "name":  "ChatWoot account"
-                                                          }
-                                      },
-                      "disabled":  true
-                  }
-              ],
-    "pinData":  {
-
+{
+  "name": "Atendente Lady",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f6ddc488-8680-4351-84dd-d9e73b2d102d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -1056
+      ],
+      "id": "ad42af64-8820-4894-89bb-8671ccf2f381",
+      "name": "Mensagem recebida",
+      "webhookId": "f6ddc488-8680-4351-84dd-d9e73b2d102d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ultima_mensagem_da_fila = $input.last()\nconst mensagem_do_workflow = $('Info').first()\n\nif (ultima_mensagem_da_fila.json.id_mensagem !== mensagem_do_workflow.json.id_mensagem) {\n  // Mensagem encavalada, para o workflow\n  return [];\n}\n\n// Pass-through da fila de mensagens\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1872,
+        -1072
+      ],
+      "id": "dec57233-13d2-4ad3-9543-6f096c15591d",
+      "name": "Mensagem encavalada?"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $('Info').item.json.telefone }}"
+            }
+          ]
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "timestamp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1648,
+        -1072
+      ],
+      "id": "4c370008-a8af-498f-9c38-4181f67bbf53",
+      "name": "Buscar mensagens",
+      "credentials": {
+        "postgres": {
+          "id": "IbTQCUZTjDnHg7GK",
+          "name": "Postgres Lady_Roots_V1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list"
+        },
+        "deleteCommand": "delete",
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2096,
+        -1072
+      ],
+      "id": "80c2a441-7872-47ac-8b2d-176de73d000c",
+      "name": "Limpar fila de mensagens",
+      "credentials": {
+        "postgres": {
+          "id": "IbTQCUZTjDnHg7GK",
+          "name": "Postgres Lady_Roots_V1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Processando mensagens encavaladas\n\nEssa etapa trata a situaÃ§Ã£o em que o usuÃ¡rio envia mÃºltiplas mensagens seguidas. O ponto negativo Ã© o aumento no tempo de resposta do agente. LÃ³gica dispensa uso de soluÃ§Ãµes mais complexas, como RabbitMQ.\n\nTempo de espera recomendado de ~16s. Quando estiver testando, recomendamos reduzir um pouco para ficar mais rÃ¡pido de testar.\n",
+        "height": 540,
+        "width": 1080,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        928,
+        -1264
+      ],
+      "id": "3b1b0a50-b5a3-4ac1-a42b-0b88e3765cca",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        -1072
+      ],
+      "id": "2d3253a2-8c64-401e-a107-12ed9bc8a09c",
+      "name": "Esperar",
+      "webhookId": "689b51a0-89fe-459d-a560-a59c79797611"
+    },
+    {
+      "parameters": {
+        "content": "# Gerando resposta",
+        "height": 812,
+        "width": 2080,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        -1264
+      ],
+      "id": "284be32f-dd43-4720-bbe3-a6a543ca8ec2",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Enviando resposta",
+        "height": 508,
+        "width": 608,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4896,
+        -1264
+      ],
+      "id": "e53d327b-aea4-448a-a7ed-3fa439c7a5eb",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# Tratando input\n",
+        "height": 540,
+        "width": 836
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        64,
+        -1264
+      ],
+      "id": "ed06f6a5-1863-4f86-84ac-126a25413554",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
                 },
-    "connections":  {
-                        "Mensagem recebida":  {
-                                                  "main":  [
-                                                               [
-                                                                   {
-                                                                       "node":  "Info",
-                                                                       "type":  "main",
-                                                                       "index":  0
-                                                                   }
-                                                               ]
-                                                           ]
-                                              },
-                        "Mensagem encavalada?":  {
-                                                     "main":  [
-                                                                  [
-                                                                      {
-                                                                          "node":  "Limpar fila de mensagens",
-                                                                          "type":  "main",
-                                                                          "index":  0
-                                                                      }
-                                                                  ]
-                                                              ]
-                                                 },
-                        "Buscar mensagens":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Mensagem encavalada?",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Limpar fila de mensagens":  {
-                                                         "main":  [
-                                                                      [
-                                                                          {
-                                                                              "node":  "Marcar como lidas",
-                                                                              "type":  "main",
-                                                                              "index":  0
-                                                                          }
-                                                                      ]
-                                                                  ]
-                                                     },
-                        "Esperar":  {
-                                        "main":  [
-                                                     [
-                                                         {
-                                                             "node":  "Buscar mensagens",
-                                                             "type":  "main",
-                                                             "index":  0
-                                                         }
-                                                     ]
-                                                 ]
-                                    },
-                        "Tipo de mensagem":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "Enfileirar mensagem",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ],
-                                                              [
-                                                                  {
-                                                                      "node":  "Download Ã¡udio",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "MCP Google Calendar":  {
-                                                    "ai_tool":  [
-                                                                    [
-
-                                                                    ]
-                                                                ]
-                                                },
-                        "Listar arquivos":  {
-                                                "ai_tool":  [
-                                                                [
-                                                                    {
-                                                                        "node":  "AI Agent",
-                                                                        "type":  "ai_tool",
-                                                                        "index":  0
-                                                                    }
-                                                                ]
-                                                            ]
-                                            },
-                        "Baixar e enviar arquivo":  {
-                                                        "ai_tool":  [
-                                                                        [
-                                                                            {
-                                                                                "node":  "AI Agent",
-                                                                                "type":  "ai_tool",
-                                                                                "index":  0
-                                                                            }
-                                                                        ]
-                                                                    ]
-                                                    },
-                        "Enviar alerta de cancelamento":  {
-                                                              "ai_tool":  [
-                                                                              [
-                                                                                  {
-                                                                                      "node":  "AI Agent",
-                                                                                      "type":  "ai_tool",
-                                                                                      "index":  0
-                                                                                  }
-                                                                              ]
-                                                                          ]
-                                                          },
-                        "Memory":  {
-                                       "ai_memory":  [
-                                                         [
-                                                             {
-                                                                 "node":  "AI Agent",
-                                                                 "type":  "ai_memory",
-                                                                 "index":  0
-                                                             }
-                                                         ]
-                                                     ]
-                                   },
-                        "Refletir":  {
-                                         "ai_tool":  [
-                                                         [
-                                                             {
-                                                                 "node":  "AI Agent",
-                                                                 "type":  "ai_tool",
-                                                                 "index":  0
-                                                             }
-                                                         ]
-                                                     ]
-                                     },
-                        "Marcar como lidas":  {
-                                                  "main":  [
-                                                               [
-                                                                   {
-                                                                       "node":  "Digitando/Gravando...",
-                                                                       "type":  "main",
-                                                                       "index":  0
-                                                                   }
-                                                               ]
-                                                           ]
-                                              },
-                        "Digitando/Gravando...":  {
-                                                      "main":  [
-                                                                   [
-                                                                       {
-                                                                           "node":  "Set mensagens",
-                                                                           "type":  "main",
-                                                                           "index":  0
-                                                                       }
-                                                                   ]
-                                                               ]
-                                                  },
-                        "Set mensagens":  {
-                                              "main":  [
-                                                           [
-                                                               {
-                                                                   "node":  "Get a file",
-                                                                   "type":  "main",
-                                                                   "index":  0
-                                                               }
-                                                           ]
-                                                       ]
-                                          },
-                        "Download Ã¡udio":  {
-                                                "main":  [
-                                                             [
-                                                                 {
-                                                                     "node":  "Extract from File",
-                                                                     "type":  "main",
-                                                                     "index":  0
-                                                                 }
-                                                             ]
-                                                         ]
-                                            },
-                        "Extract from File":  {
-                                                  "main":  [
-                                                               [
-                                                                   {
-                                                                       "node":  "Convert to File",
-                                                                       "type":  "main",
-                                                                       "index":  0
-                                                                   }
-                                                               ]
-                                                           ]
-                                              },
-                        "Convert to File":  {
-                                                "main":  [
-                                                             [
-                                                                 {
-                                                                     "node":  "Transcrever audio",
-                                                                     "type":  "main",
-                                                                     "index":  0
-                                                                 }
-                                                             ]
-                                                         ]
-                                            },
-                        "Resetar status":  {
-                                               "main":  [
-                                                            [
-                                                                {
-                                                                    "node":  "Enviar texto.",
-                                                                    "type":  "main",
-                                                                    "index":  0
-                                                                }
-                                                            ]
-                                                        ]
-                                           },
-                        "Info":  {
-                                     "main":  [
-                                                  [
-                                                      {
-                                                          "node":  "Mensagem chegando2?",
-                                                          "type":  "main",
-                                                          "index":  0
-                                                      }
-                                                  ]
-                                              ]
-                                 },
-                        "Escalar humano":  {
-                                               "ai_tool":  [
-                                                               [
-                                                                   {
-                                                                       "node":  "AI Agent",
-                                                                       "type":  "ai_tool",
-                                                                       "index":  0
-                                                                   }
-                                                               ]
-                                                           ]
-                                           },
-                        "Transcrever audio":  {
-                                                  "main":  [
-                                                               [
-                                                                   {
-                                                                       "node":  "Limpar fila de mensagens",
-                                                                       "type":  "main",
-                                                                       "index":  0
-                                                                   }
-                                                               ]
-                                                           ]
-                                              },
-                        "consulta_site":  {
-                                              "ai_tool":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "AI Agent",
-                                                                      "type":  "ai_tool",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                          },
-                        "consulta_instagram":  {
-                                                   "ai_tool":  [
-                                                                   [
-                                                                       {
-                                                                           "node":  "AI Agent",
-                                                                           "type":  "ai_tool",
-                                                                           "index":  0
-                                                                       }
-                                                                   ]
-                                                               ]
-                                               },
-                        "agenda_tool":  {
-                                            "ai_tool":  [
-                                                            [
-                                                                {
-                                                                    "node":  "AI Agent",
-                                                                    "type":  "ai_tool",
-                                                                    "index":  0
-                                                                }
-                                                            ]
-                                                        ]
-                                        },
-                        "Get a file":  {
-                                           "main":  [
-                                                        [
-                                                            {
-                                                                "node":  "Extract from File1",
-                                                                "type":  "main",
-                                                                "index":  0
-                                                            }
-                                                        ]
-                                                    ]
-                                       },
-                        "Extract from File1":  {
-                                                   "main":  [
-                                                                [
-                                                                    {
-                                                                        "node":  "Data \u0026 Hora",
-                                                                        "type":  "main",
-                                                                        "index":  0
-                                                                    }
-                                                                ]
-                                                            ]
-                                               },
-                        "Data \u0026 Hora":  {
-                                                 "main":  [
-                                                              [
-                                                                  {
-                                                                      "node":  "AI Agent",
-                                                                      "type":  "main",
-                                                                      "index":  0
-                                                                  }
-                                                              ]
-                                                          ]
-                                             },
-                        "Enfileirar mensagem":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "Esperar",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                },
-                        "OpenAI Chat Model":  {
-                                                  "ai_languageModel":  [
-                                                                           [
-                                                                               {
-                                                                                   "node":  "AI Agent",
-                                                                                   "type":  "ai_languageModel",
-                                                                                   "index":  0
-                                                                               }
-                                                                           ]
-                                                                       ]
-                                              },
-                        "AI Agent":  {
-                                         "main":  [
-                                                      [
-                                                          {
-                                                              "node":  "Formatar texto",
-                                                              "type":  "main",
-                                                              "index":  0
-                                                          }
-                                                      ]
-                                                  ]
-                                     },
-                        "Formatar texto":  {
-                                               "main":  [
-                                                            [
-                                                                {
-                                                                    "node":  "Resetar status",
-                                                                    "type":  "main",
-                                                                    "index":  0
-                                                                }
-                                                            ]
-                                                        ]
-                                           },
-                        "Mensagem chegando2?":  {
-                                                    "main":  [
-                                                                 [
-                                                                     {
-                                                                         "node":  "Tipo de mensagem",
-                                                                         "type":  "main",
-                                                                         "index":  0
-                                                                     }
-                                                                 ]
-                                                             ]
-                                                },
-                        "Reagir mensagem":  {
-                                                "ai_tool":  [
-                                                                [
-                                                                    {
-                                                                        "node":  "AI Agent",
-                                                                        "type":  "ai_tool",
-                                                                        "index":  0
-                                                                    }
-                                                                ]
-                                                            ]
-                                            }
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Info').item.json.id_mensagem }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
                     },
-    "active":  true,
-    "settings":  {
-                     "executionOrder":  "v1",
-                     "availableInMCP":  false
-                 },
-    "versionId":  "1e2dc10b-748f-4e71-bc8c-8661dc030902",
-    "meta":  {
-                 "templateCredsSetupCompleted":  true,
-                 "instanceId":  "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
-             },
-    "id":  "LIfJ0ahW8cqcnl5F",
-    "tags":  [
-
-             ]
+                    "id": "1382cd26-d96e-4c55-99dd-2ca305ffe82e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b9a7e16f-b6e4-45d7-846d-92dcb3117593",
+                    "leftValue": "={{ $('Info').item.json.mensagem_de_audio }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ãudio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        -1056
+      ],
+      "id": "da7758dc-dcf5-46d2-8c55-ea527f38405c",
+      "name": "Tipo de mensagem"
+    },
+    {
+      "parameters": {
+        "content": "# Processando Ã¡udio",
+        "height": 420,
+        "width": 1080,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -704
+      ],
+      "id": "d92b0b8a-118f-43a5-9651-f65fcc314cdb",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "=https://chat.abbyai.run/mcp/db6bc79d-ba32-41c4-b492-f0f5bbcb8fd3/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3824,
+        -656
+      ],
+      "id": "e1b69b85-21a6-4ac2-8436-87557b320d65",
+      "name": "MCP Google Calendar"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1Y3X6dl4oAXD2HbpMab6IBvRd3LOjoTsg",
+            "mode": "list",
+            "cachedResultName": "Files",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1Y3X6dl4oAXD2HbpMab6IBvRd3LOjoTsg"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        4176,
+        -656
+      ],
+      "id": "740bb253-9798-4b10-acc4-16c8cdb20551",
+      "name": "Listar arquivos",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "description": "Use essa ferramenta para baixar um arquivo do Google Drive e enviÃ¡-lo para o usuÃ¡rio.\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "b6q39LPDSqsvzCYk",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/b6q39LPDSqsvzCYk",
+          "cachedResultName": "3. Baixar e enviar arquivo do Google Drive"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "file_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('file_id', ``, 'string') }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [
+            "file_id"
+          ],
+          "schema": [
+            {
+              "id": "file_id",
+              "displayName": "file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        4320,
+        -656
+      ],
+      "id": "820a4778-e3ce-40c5-a2e5-072bf5e1742f",
+      "name": "Baixar e enviar arquivo"
+    },
+    {
+      "parameters": {
+        "content": "# Marcar como lida e \"digitando...\"",
+        "height": 540,
+        "width": 724,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        -1264
+      ],
+      "id": "7be285fa-b2ad-412e-9ef5-22af74819073",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Info').item.json.telegram_chat_id }}",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        4464,
+        -656
+      ],
+      "id": "854a6268-a5e3-48a7-8a1d-9e3f5e511771",
+      "name": "Enviar alerta de cancelamento",
+      "webhookId": "487b54cb-d0a4-492c-847c-3157e0fd7aa0",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Info').item.json.telefone }}",
+        "tableName": "n8n_historico_mensagens",
+        "contextWindowLength": 25
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3008,
+        -656
+      ],
+      "id": "fb44a6ee-9b17-4ba9-b2af-59d81e20c882",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "IbTQCUZTjDnHg7GK",
+          "name": "Postgres Lady_Roots_V1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use a ferramenta para refletir sobre algo. Ela nÃ£o obterÃ¡ novas informaÃ§Ãµes nem alterarÃ¡ o banco de dados, apenas adicionarÃ¡ o pensamento ao registro. Use-a quando for necessÃ¡rio um raciocÃ­nio complexo ou alguma memÃ³ria em cache."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        3152,
+        -656
+      ],
+      "id": "f7010eba-8a6a-4861-b631-2941373fa235",
+      "name": "Refletir"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/update_last_seen",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2336,
+        -1072
+      ],
+      "id": "58f4d35a-e6bb-4993-95c5-331b25774eef",
+      "name": "Marcar como lidas",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/toggle_typing_status",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "typing_status",
+              "value": "={{ $('Info').item.json.mensagem_de_audio ? 'recording' : 'on' }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2560,
+        -1072
+      ],
+      "id": "e5e62e10-8105-42db-846d-3b0235e15c50",
+      "name": "Digitando/Gravando...",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7eab8669-6929-4dc6-b3e2-943065bc306c",
+              "name": "mensagem",
+              "value": "={{ $('Info').item.json.mensagem ? $('Mensagem encavalada?').all().map(info => info.json.mensagem).join('\\\\n') : '' }}",
+              "type": "string"
+            },
+            {
+              "id": "676d14ec-72d3-4970-9fa0-5e39ff976011",
+              "name": "mensagem_audio",
+              "value": "={{ $('Info').item.json.mensagem_de_audio ? $('Transcrever audio').item.json.text : '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2864,
+        -1072
+      ],
+      "id": "416752b1-851d-4888-807f-81793906294d",
+      "name": "Set mensagens",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "url": "={{\n  $('Info').item.json.url_chatwoot.replace(/\\/$/, '') + $('Mensagem recebida').item.json.body.attachments[0].data_url.replace(/^https?:\\/\\/[^/]+/, '').replace(/^http:\\/\\//, '')\n}}\n",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1056,
+        -544
+      ],
+      "id": "ddb16e5c-df6b-416b-aab1-d5b210eba13f",
+      "name": "Download Ã¡udio",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        -544
+      ],
+      "id": "e5449082-b423-4392-888a-403bebacf725",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        -544
+      ],
+      "id": "c7802a26-e3c3-4b0d-87e5-5448fdf58917",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/toggle_typing_status",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "typing_status",
+              "value": "off"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4976,
+        -1072
+      ],
+      "id": "7ce79fd7-91cc-413e-89a1-7763647016a3",
+      "name": "Resetar status",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info').item.json.id_conta }}/conversations/{{ $('Info').item.json.id_conversa }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $('Formatar texto').item.json.texto }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5280,
+        -1072
+      ],
+      "id": "028dd962-0588-4e55-9eb3-ba3f634c7b5e",
+      "name": "Enviar texto.",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c8fd010d-6096-4a50-b3e2-e9fe26661840",
+              "name": "id_mensagem",
+              "value": "={{ $json.body.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1b513343-9b6a-4f6e-a012-ed819bf34a31",
+              "name": "id_conta",
+              "value": "={{ $json.body.account.id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c14b9a-5f27-465a-a047-71553826bd7a",
+              "name": "id_conversa",
+              "value": "={{ $json.body.conversation.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8bf522a6-75fb-434a-854c-b736539309e1",
+              "name": "telefone",
+              "value": "={{ $json.body.sender.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "0d622a33-f313-4758-a764-fa6cbf2b0587",
+              "name": "mensagem",
+              "value": "={{ $json.body.content || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "8f4b9d84-56e0-4f45-9f17-68c53f365f43",
+              "name": "mensagem_de_audio",
+              "value": "={{ $json.body.attachments?.[0]?.meta?.is_recorded_audio || false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "2b679a3f-788f-4cd2-88d5-4f03af68f224",
+              "name": "timestamp",
+              "value": "={{ $json.body.created_at }}",
+              "type": "string"
+            },
+            {
+              "id": "24caf88e-74ce-43ab-8dc4-1fff471b706f",
+              "name": "tipo",
+              "value": "={{ $json.body.message_type }}",
+              "type": "string"
+            },
+            {
+              "id": "573669d2-1e43-4010-8c82-a67459ffe1db",
+              "name": "etiquetas",
+              "value": "={{ $json.body.conversation.labels }}",
+              "type": "array"
+            },
+            {
+              "id": "40ff895f-f63f-4e4f-bba3-c7d803c277f1",
+              "name": "url_chatwoot",
+              "value": "https://chatwoot.abbyai.run",
+              "type": "string"
+            },
+            {
+              "id": "cf71dea1-d585-4235-8f05-29bc5f82b5df",
+              "name": "telegram_chat_id",
+              "value": "1623280716",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -1056
+      ],
+      "id": "b2d78eed-01ec-4f50-8f5b-dcde17b9732f",
+      "name": "Info"
+    },
+    {
+      "parameters": {
+        "description": "Chame essa ferramenta para direcionar o atendimento para o gestor responsÃ¡vel.",
+        "workflowId": {
+          "__rl": true,
+          "value": "kLki6pHXMlZ41oUH",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/kLki6pHXMlZ41oUH",
+          "cachedResultName": "4. Escalar humano"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome', ``, 'string') }}",
+            "ultima_mensagem": "={{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "telegram_chat_id": "={{ $('Info').item.json.telegram_chat_id }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "ultima_mensagem",
+              "displayName": "ultima_mensagem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conta",
+              "displayName": "id_conta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "id_conversa",
+              "displayName": "id_conversa",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telegram_chat_id",
+              "displayName": "telegram_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "url_chatwoot",
+              "displayName": "url_chatwoot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        4608,
+        -656
+      ],
+      "id": "7634813f-e119-42c8-8cf9-aabc46a42e15",
+      "name": "Escalar humano"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "pt"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1840,
+        -544
+      ],
+      "id": "6f1eec12-a3e9-4c8f-a4c4-cbc26949cd7d",
+      "name": "Transcrever audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ll562DreZPSEn57a",
+          "name": "OpenAi account NaveRealengo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "vX8CTbvy4wm3gI37",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/vX8CTbvy4wm3gI37",
+          "cachedResultName": "8. Agente de Consulta"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pergunta_usuario": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('pergunta_usuario', ``, 'string') }}",
+            "tipo_busca": "curso"
+          },
+          "matchingColumns": [
+            "pergunta_usuario"
+          ],
+          "schema": [
+            {
+              "id": "pergunta_usuario",
+              "displayName": "pergunta_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3696,
+        -656
+      ],
+      "id": "ae273128-ec46-43eb-87b0-5f1ecde93ad8",
+      "name": "consulta_site"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "vX8CTbvy4wm3gI37",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/vX8CTbvy4wm3gI37",
+          "cachedResultName": "8. Agente de Consulta"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pergunta_usuario": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('pergunta_usuario', ``, 'string') }}",
+            "tipo_busca": "institucional"
+          },
+          "matchingColumns": [
+            "pergunta_usuario"
+          ],
+          "schema": [
+            {
+              "id": "pergunta_usuario",
+              "displayName": "pergunta_usuario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        4032,
+        -656
+      ],
+      "id": "839e1fed-30c0-4f45-8550-ac6459617698",
+      "name": "consulta_instagram"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "AgenteAbby",
+          "mode": "list",
+          "cachedResultName": "AgenteAbby",
+          "cachedResultUrl": "https://github.com/AgenteAbby"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "LadyRoots",
+          "mode": "list",
+          "cachedResultName": "LadyRoots",
+          "cachedResultUrl": "https://github.com/AgenteAbby/LadyRoots"
+        },
+        "filePath": "Prompt_Lady_Roots_Humanizado.md",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        3104,
+        -1072
+      ],
+      "id": "5c4bc789-ccd3-4a71-8f44-c55565e67682",
+      "name": "Get a file",
+      "webhookId": "8c20f800-28ef-4711-ab25-436ede4684a9",
+      "credentials": {
+        "githubApi": {
+          "id": "68dRPQIO6Hk0P7wD",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        3328,
+        -1072
+      ],
+      "id": "9caec3aa-18e3-464f-b9fa-216e6ebd4056",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "377d9293-37f4-4623-a44e-9b318968b2e4",
+              "name": "data_hoje",
+              "value": "={{$now.setZone('America/Sao_Paulo').toFormat(\"dd/MM/yyyy HH:mm:ss\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3536,
+        -1072
+      ],
+      "id": "3020d283-35eb-401a-a565-12efd91d519e",
+      "name": "Data & Hora"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_fila_mensagens",
+          "mode": "list",
+          "cachedResultName": "n8n_fila_mensagens"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_mensagem": "={{ $('Info').item.json.id_mensagem }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "mensagem": "={{ $('Info').item.json.mensagem }}",
+            "timestamp": "={{ $('Info').item.json.timestamp.toDateTime() }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "id_mensagem",
+              "displayName": "id_mensagem",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mensagem",
+              "displayName": "mensagem",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1232,
+        -1072
+      ],
+      "id": "3ece1e3e-1642-49b5-856b-bca31864aff3",
+      "name": "Enfileirar mensagem",
+      "credentials": {
+        "postgres": {
+          "id": "IbTQCUZTjDnHg7GK",
+          "name": "Postgres Lady_Roots_V1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-nano"
+        },
+        "responsesApiEnabled": false,
+        "options": {
+          "frequencyPenalty": 0.2,
+          "maxTokens": 900,
+          "temperature": 0.7,
+          "topP": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2864,
+        -656
+      ],
+      "id": "7403cbad-d848-4b28-96db-18b41a5e1ba5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ll562DreZPSEn57a",
+          "name": "OpenAi account NaveRealengo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ $json.data }}\n={{ $json.data_hoje }}\n={{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
+        "options": {
+          "systemMessage": "{{ $json.data }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3792,
+        -1072
+      ],
+      "id": "c343830e-f0b6-436d-b39a-4888f5312ec2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "let texto = $json.output || $json.text || $json.texto || \"\";\n\n// Remove o caractere de substituiÃ§Ã£o (ï¿½)\ntexto = texto.replace(/\\uFFFD/g, \"\");\n\n// Remove caracteres de controle\ntexto = texto.replace(/[\\u0000-\\u001F\\u007F]/g, \"\");\n\n// Remove emojis (faixa unicode comum)\ntexto = texto.replace(\n  /[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{26FF}\\u{2700}-\\u{27BF}]/gu,\n  \"\"\n);\n\n// Opcional: remove variaÃ§Ãµes invisÃ­veis (VS16) que aparecem com emojis\ntexto = texto.replace(/\\uFE0F/g, \"\");\n\n// Limpa espaÃ§os extras\ntexto = texto.replace(/[ \\t]+\\n/g, \"\\n\").trim();\n\nreturn [{ json: { texto } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4448,
+        -1072
+      ],
+      "id": "a2a4d66c-7917-4178-bf74-3be4bf66d87d",
+      "name": "Formatar texto"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "976ae1fe-d155-40d0-a5e6-a2552e869658",
+              "leftValue": "={{ $json.tipo === 'incoming' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d0ce738d-77ab-42c4-8fed-e4fa43a3444a",
+              "leftValue": "={{ !$json.etiquetas?.includes('agente-off') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": "={{ $json.mensagem_de_audio === true }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        -1056
+      ],
+      "id": "cbd33760-5b7b-4937-94c1-4f288afae4f3",
+      "name": "Mensagem chegando2?"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Envia uma mensagem de reaÃ§Ã£o como resposta a uma mensagem do usuÃ¡rio. ReaÃ§Ã£o Ã© sempre um emoji.",
+        "method": "POST",
+        "url": "={{ $('Info').item.json.url_chatwoot + '/api/v1/accounts/' + $('Info').item.json.id_conta + '/conversations/' + $('Info').item.json.id_conversa + '/messages' }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "content_attributes",
+              "valueProvider": "fieldValue",
+              "value": "={{ JSON.stringify({ \"in_reply_to\": Number($('Info').item.json.id_mensagem), \"is_reaction\": true }) }}"
+            },
+            {
+              "name": "content",
+              "valueProvider": "fromAI"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        3536,
+        -656
+      ],
+      "id": "43ba6f0c-22e9-49f0-bfac-9d5407340731",
+      "name": "Reagir mensagem",
+      "credentials": {
+        "chatwootApi": {
+          "id": "OsAo4ov6JZp0l9SX",
+          "name": "ChatWoot account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "AGENDA_TOOL_N8N",
+          "mode": "list",
+          "cachedResultName": "9. Ferramenta de Agenda Lady"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data_inicio": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('data_inicio', ``, 'string') }}",
+            "data_fim": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('data_fim', ``, 'string') }}",
+            "suite": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('suite', ``, 'string') }}",
+            "nome_cliente": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome_cliente', ``, 'string') }}",
+            "acao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('acao', `consultar_disponibilidade`, 'string') }}"
+          },
+          "matchingColumns": [
+            "data_inicio",
+            "data_fim",
+            "suite",
+            "acao"
+          ],
+          "schema": [
+            {
+              "id": "data_inicio",
+              "displayName": "data_inicio",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "description": "Ex: 2026-03-10"
+            },
+            {
+              "id": "data_fim",
+              "displayName": "data_fim",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "description": "Ex: 2026-03-13"
+            },
+            {
+              "id": "suite",
+              "displayName": "suite",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "description": "O nome da suíte: aventureiro, lagoa azul ou pico do papagaio"
+            },
+            {
+              "id": "acao",
+              "displayName": "acao",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "description": "Deve ser 'consultar_disponibilidade' ou 'agendar'"
+            },
+            {
+              "id": "nome_cliente",
+              "displayName": "nome_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2864,
+        -448
+      ],
+      "id": "agenda-tool-id-1234",
+      "name": "agenda_tool"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Mensagem recebida": {
+      "main": [
+        [
+          {
+            "node": "Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem encavalada?": {
+      "main": [
+        [
+          {
+            "node": "Limpar fila de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar mensagens": {
+      "main": [
+        [
+          {
+            "node": "Mensagem encavalada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpar fila de mensagens": {
+      "main": [
+        [
+          {
+            "node": "Marcar como lidas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar": {
+      "main": [
+        [
+          {
+            "node": "Buscar mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de mensagem": {
+      "main": [
+        [
+          {
+            "node": "Enfileirar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download Ã¡udio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listar arquivos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Baixar e enviar arquivo": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar alerta de cancelamento": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refletir": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar como lidas": {
+      "main": [
+        [
+          {
+            "node": "Digitando/Gravando...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Digitando/Gravando...": {
+      "main": [
+        [
+          {
+            "node": "Set mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set mensagens": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Ã¡udio": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Transcrever audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resetar status": {
+      "main": [
+        [
+          {
+            "node": "Enviar texto.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info": {
+      "main": [
+        [
+          {
+            "node": "Mensagem chegando2?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar humano": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcrever audio": {
+      "main": [
+        [
+          {
+            "node": "Limpar fila de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_site": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consulta_instagram": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Data & Hora",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data & Hora": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enfileirar mensagem": {
+      "main": [
+        [
+          {
+            "node": "Esperar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Formatar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar texto": {
+      "main": [
+        [
+          {
+            "node": "Resetar status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem chegando2?": {
+      "main": [
+        [
+          {
+            "node": "Tipo de mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reagir mensagem": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "agenda_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "versionId": "223e6a8a-0625-48a3-bfd9-30db76a0ed01",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "LIfJ0ahW8cqcnl5F",
+  "tags": []
 }
