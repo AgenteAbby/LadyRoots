@@ -1,0 +1,238 @@
+{
+  "name": "Tool Pagamento Asaas",
+  "nodes": [
+    {
+      "parameters": {
+        "name": "tool_pagamento",
+        "description": "Geração de link de pagamento para fechamento de venda. Exige NOME, CPF/PASSAPORTE e VALOR (obrigatórios)."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "trigger-tool-pagamento",
+      "name": "Tool Gatilho"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api-sandbox.asaas.com/v3/customers",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $('Tool Gatilho').item.json.query.split('|')[0].trim() || 'Cliente Lady' }}"
+            },
+            {
+              "name": "cpfCnpj",
+              "value": "={{ $('Tool Gatilho').item.json.query.split('|')[1].trim() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        200,
+        0
+      ],
+      "id": "criar-cliente-asaas",
+      "name": "Criar Cliente",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OAsaasCredentialsId",
+          "name": "Asaas"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api-sandbox.asaas.com/v3/payments",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "customer",
+              "value": "={{ $('Criar Cliente').item.json.id }}"
+            },
+            {
+              "name": "billingType",
+              "value": "=UNDEFINED"
+            },
+            {
+              "name": "value",
+              "value": "={{ parseFloat($('Tool Gatilho').item.json.query.split('|')[2].trim().replace(',', '.')) }}"
+            },
+            {
+              "name": "dueDate",
+              "value": "={{ $today.plus(1, 'hour').toFormat('yyyy-MM-dd') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "criar-cobranca-asaas",
+      "name": "Criar Cobrança",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "OAsaasCredentialsId",
+          "name": "Asaas"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cobranca-sucesso",
+              "leftValue": "={{ $('Criar Cobrança').item.json.invoiceUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        0
+      ],
+      "id": "if-sucesso",
+      "name": "Gerou Link?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "set-resposta-sucesso",
+              "name": "resposta",
+              "value": "=Link gerado com sucesso: {{ $('Criar Cobrança').item.json.invoiceUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        -100
+      ],
+      "id": "set-sucesso",
+      "name": "Sucesso"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "set-resposta-erro",
+              "name": "resposta",
+              "value": "Falha no sistema de pagamento. Escale para o atendimento humano imediatamente informando o problema de geração de pagamento e o erro retornado pela API.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        100
+      ],
+      "id": "set-erro",
+      "name": "Erro"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tool Gatilho": {
+      "main": [
+        [
+          {
+            "node": "Criar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Cliente": {
+      "main": [
+        [
+          {
+            "node": "Criar Cobrança",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Cobrança": {
+      "main": [
+        [
+          {
+            "node": "Gerou Link?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerou Link?": {
+      "main": [
+        [
+          {
+            "node": "Sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "tool-asaas-v1"
+}
