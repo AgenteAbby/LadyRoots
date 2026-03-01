@@ -2,18 +2,15 @@
   "name": "Tool Pagamento Asaas",
   "nodes": [
     {
-      "parameters": {
-        "name": "tool_pagamento",
-        "description": "Geração de link de pagamento para fechamento de venda. Exige NOME, CPF/PASSAPORTE e VALOR (obrigatórios)."
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "typeVersion": 1.2,
+      "parameters": {},
+      "id": "trigger-tool-pagamento",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
       "position": [
         0,
         0
-      ],
-      "id": "trigger-tool-pagamento",
-      "name": "Tool Gatilho"
+      ]
     },
     {
       "parameters": {
@@ -26,11 +23,11 @@
           "parameters": [
             {
               "name": "name",
-              "value": "={{ $('Tool Gatilho').item.json.query.split('|')[0].trim() || 'Cliente Lady' }}"
+              "value": "={{ $('When Executed by Another Workflow').item.json.nome || 'Cliente Lady' }}"
             },
             {
               "name": "cpfCnpj",
-              "value": "={{ $('Tool Gatilho').item.json.query.split('|')[1].trim() }}"
+              "value": "={{ $('When Executed by Another Workflow').item.json.cpf }}"
             }
           ]
         },
@@ -71,7 +68,7 @@
             },
             {
               "name": "value",
-              "value": "={{ parseFloat($('Tool Gatilho').item.json.query.split('|')[2].trim().replace(',', '.')) }}"
+              "value": "={{ parseFloat($('When Executed by Another Workflow').item.json.valor.toString().replace(',', '.')) }}"
             },
             {
               "name": "dueDate",
@@ -180,7 +177,7 @@
   ],
   "pinData": {},
   "connections": {
-    "Tool Gatilho": {
+    "When Executed by Another Workflow": {
       "main": [
         [
           {
