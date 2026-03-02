@@ -132,11 +132,11 @@
             },
             {
               "name": "cpfCnpj",
-              "value": "={{ $('Gatilho').item.json.cpf }}"
+              "value": "={{ /^[A-Za-z]+/.test($('Gatilho').item.json.cpf) || $('Gatilho').item.json.cpf.length < 11 ? '' : $('Gatilho').item.json.cpf }}"
             },
             {
               "name": "mobilePhone",
-              "value": "={{ $('Gatilho').item.json.telefone.replace(/^\\+55/, '') }}"
+              "value": "={{ $('Gatilho').item.json.telefone }}"
             },
             {
               "name": "externalReference",
@@ -832,7 +832,7 @@
           "parameters": [
             {
               "name": "cpfCnpj",
-              "value": "={{ $('Gatilho').item.json.cpf }}"
+              "value": "={{ /^[A-Za-z]+/.test($('Gatilho').item.json.cpf) || $('Gatilho').item.json.cpf.length < 11 ? '' : $('Gatilho').item.json.cpf }}"
             }
           ]
         },
