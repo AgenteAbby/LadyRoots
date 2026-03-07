@@ -57,11 +57,12 @@
         64
       ],
       "id": "7dfc8445-7a40-42a7-b1f7-47c92b3f91c6",
-      "name": "Feed do Instagram"
+      "name": "Feed do Instagram",
+      "continueOnFail": true
     },
     {
       "parameters": {
-        "jsCode": "try {\\n  // n8n XML parse via RSS parser built-in or string extract se nao tiver habilitado\\n  const rawXml = $input.item.json.data || $input.item.json;\\n  let novidades = 'Novidade na área! ';\\n\\n  if (rawXml && rawXml.rss && rawXml.rss.channel && rawXml.rss.channel.item) {\\n    const posts = Array.isArray(rawXml.rss.channel.item) ? rawXml.rss.channel.item.slice(0, 3) : [rawXml.rss.channel.item];\\n    \\n    let resumo = posts.map((p, index) => {\\n      let title = p.title || '';\\n      let link = p.link || 'https://www.instagram.com/ladyrootsilhagrande/';\\n      return `${index + 1}. ${title.substring(0, 60)}... (Veja mais: ${link})`;\\n    }).join('\\\\n');\\n    \\n    novidades += 'Confira o que está rolando na nossa página nas últimas horas:\\\\n' + resumo;\\n  } else {\\n    // fallback caso o feed falhe momentaneamente\\n    novidades = 'Para saber o que está acontecendo na ilha agora, de forma em tempo real, acompanhe a gente no Instagram! Dá uma olhada nas nossas últimas postagens: https://instagram.com/ladyrootsilhagrande';\\n  }\\n\\n  return {\\n    status: 'sucesso',\\n    resposta_texto: novidades\\n  };\\n} catch(e) {\\n  return {\\n    status: 'sucesso',\\n    resposta_texto: 'Confira as novidades mais recentes no nosso instagram: https://instagram.com/ladyrootsilhagrande'\\n  };\\n}"
+        "jsCode": "try {\n  const rawXml = $input.item.json.data || $input.item.json;\n  let novidades = 'Novidade na área! ';\n\n  if (rawXml && rawXml.rss && rawXml.rss.channel && rawXml.rss.channel.item) {\n    const posts = Array.isArray(rawXml.rss.channel.item) ? rawXml.rss.channel.item.slice(0, 3) : [rawXml.rss.channel.item];\n    \n    let resumo = posts.map((p, index) => {\n      let title = p.title || '';\n      let link = p.link || 'https://www.instagram.com/ladyrootsilhagrande/';\n      return (index + 1) + '. ' + title.substring(0, 60) + '... (Veja mais: ' + link + ')';\n    }).join('\\n');\n    \n    novidades += 'Confira o que está rolando na nossa página nas últimas horas:\\n' + resumo;\n  } else {\n    novidades = 'Para saber o que está acontecendo na ilha agora, de forma em tempo real, acompanhe a gente no Instagram! Dá uma olhada nas nossas últimas postagens: https://instagram.com/ladyrootsilhagrande';\n  }\n\n  return [\n    {\n      json: {\n        status: 'sucesso',\n        resposta_texto: novidades\n      }\n    }\n  ];\n} catch(e) {\n  return [\n    {\n      json: {\n        status: 'sucesso',\n        resposta_texto: 'Confira as novidades mais recentes no nosso instagram: https://instagram.com/ladyrootsilhagrande'\n      }\n    }\n  ];\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
