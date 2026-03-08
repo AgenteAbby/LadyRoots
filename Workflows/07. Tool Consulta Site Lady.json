@@ -6,10 +6,10 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1,
       "position": [
-        960,
-        -48
+        1472,
+        -224
       ],
-      "id": "3b12d049-1ec9-485d-a4c3-cffffebe8f94",
+      "id": "b85eae83-d87f-42ac-8b1f-a07bfd474cd7",
       "name": "When Executed by Another Workflow"
     },
     {
@@ -26,10 +26,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        1184,
-        -48
+        1696,
+        -224
       ],
-      "id": "ec61c237-167c-4e8c-89ee-b4ece06d6dd5",
+      "id": "7ffdbd45-7462-4b2d-a822-54dab0e8253d",
       "name": "Check Tipo Busca"
     },
     {
@@ -39,10 +39,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1424,
-        -160
+        1936,
+        -336
       ],
-      "id": "30a2912c-0b9c-4de8-b995-416d9e97827e",
+      "id": "15ed914b-58fd-45c6-99a5-3f3541e8cba4",
       "name": "Respostas do Site"
     },
     {
@@ -53,10 +53,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1424,
-        64
+        1936,
+        -112
       ],
-      "id": "7dfc8445-7a40-42a7-b1f7-47c92b3f91c6",
+      "id": "ae3b3f8c-13b2-4da0-b4ce-2f90e0fd65c3",
       "name": "Feed do Instagram",
       "continueOnFail": true
     },
@@ -67,10 +67,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1664,
-        64
+        2176,
+        -112
       ],
-      "id": "c91d6b86-ba79-402a-a379-6f45c96272a9",
+      "id": "ceb06432-4a00-4e2f-bf68-548ea3c97dc6",
       "name": "Formatar Novidades"
     }
   ],
@@ -122,7 +122,7 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "091ccb4a-ea42-4952-a9ae-38322c9b928f",
+  "versionId": "210a792a-974c-4ede-99d9-af9d2faa1771",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
