@@ -1,0 +1,100 @@
+{
+  "name": "criar_reserva",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-reserva",
+      "name": "Executar Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/auth/login",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "tenant", "value": "ladyroots"},
+            {"name": "identity", "value": "seu_email_aqui@gmail.com"},
+            {"name": "password", "value": "sua_senha"},
+            {"name": "remember", "value": "1"},
+            {"name": "from", "value": "hq/home"}
+          ]
+        },
+        "options": {
+          "response": { "response": { "fullResponse": true } }
+        }
+      },
+      "id": "login-reserva",
+      "name": "Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [200, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/booking/period_reservation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.headers['set-cookie'] ? $json.headers['set-cookie'].join('; ') : '' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "from", "value": "={{ $node['Executar Workflow Trigger'].json['data_inicio'] }}"},
+            {"name": "to", "value": "={{ $node['Executar Workflow Trigger'].json['data_fim'] }}"},
+            {"name": "name", "value": "={{ $node['Executar Workflow Trigger'].json['nome_cliente'] }}"},
+            {"name": "surname", "value": "={{ $node['Executar Workflow Trigger'].json['sobrenome_cliente'] || 'WhatsApp' }}"},
+            {"name": "email", "value": "={{ $node['Executar Workflow Trigger'].json['telefone_cliente'] }}@wpp.com"},
+            {"name": "phone", "value": "={{ $node['Executar Workflow Trigger'].json['telefone_cliente'] }}"},
+            {"name": "source", "value": "whatsapp"},
+            {"name": "units[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][1]", "value": "1"},
+            {"name": "units[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][serialized_price_info]", "value": "={{ $node['Executar Workflow Trigger'].json['token_serializado'] }}"},
+            {"name": "prices[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][1]", "value": "={{ $node['Executar Workflow Trigger'].json['valor_total'] }}"},
+            {"name": "total", "value": "={{ $node['Executar Workflow Trigger'].json['valor_total'] }}"},
+            {"name": "saveBt", "value": "1"}
+          ]
+        },
+        "options": {
+          "response": { "response": { "responseFormat": "text" } }
+        }
+      },
+      "id": "criar-reserva",
+      "name": "Disparar POST de Reserva",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [400, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const responseHTML = $input.first().json.data || '';\n\n// Uma forma rústica de garantir que rodou: se devolveu um codigo 200 normal com texto\nconst pareceSucesso = responseHTML.length > 100;\n\nreturn {\n  json: {\n    tentativa_reserva: pareceSucesso ? \"Disparado com Sucesso\" : \"Erro\",\n    msg: \"Formulário com os payloads gerado na ferramenta submetido como se fosse um humano.\"\n  }\n};"
+      },
+      "id": "validacao-reserva",
+      "name": "Analisar Transação",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 0]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Executar Workflow Trigger": {"main": [[{"node": "Login", "type": "main", "index": 0}]]},
+    "Login": {"main": [[{"node": "Disparar POST de Reserva", "type": "main", "index": 0}]]},
+    "Disparar POST de Reserva": {"main": [[{"node": "Analisar Transação", "type": "main", "index": 0}]]}
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e2e2a2b2-ccff-11bb-9876-0aa1bb34ddaa"
+}
