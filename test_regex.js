@@ -13,5 +13,5 @@ while ((match = regex.exec(html)) !== null) {
 }
 
 if (!achou) {
-  console.log('NENHUMA VAGA ENCONTRADA PELA REGEX');
+  console.log('NENHUMA VAGA ENCONTRADA PELA REGEX')
 }
