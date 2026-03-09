@@ -1633,6 +1633,13 @@
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
+        },
+        "workflowId": {
+          "__rl": true,
+          "value": "VwW9wG1_9-8kMgvPqC20p",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VwW9wG1_9-8kMgvPqC20p",
+          "cachedResultName": "05. Tool criar_reserva HQBeds"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
