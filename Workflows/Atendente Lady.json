@@ -1008,9 +1008,9 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=={{ $json.data }}\n={{ $json.data_hoje }}\n={{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
+        "text": "={{ $json.data_hoje }}\\n\\nMensagem do Usuário: {{ $('Set mensagens').item.json.mensagem || $('Set mensagens').item.json.mensagem_audio }}",
         "options": {
-          "systemMessage": "{{ $json.data }}"
+          "systemMessage": "={{ $json.data }}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1608,6 +1608,8 @@
     },
     {
       "parameters": {
+        "name": "criar_reserva",
+        "description": "Ferramenta para efetivar a reserva no sistema. OBRIGATÓRIO usar apenas DEPOIS que a ferramenta verificar_vagas encontrar a suíte e o hóspede confirmar a intenção.",
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
@@ -1847,6 +1849,8 @@
     },
     {
       "parameters": {
+        "name": "verificar_vagas",
+        "description": "OBRIGATÓRIO USAR IMEDIATAMENTE quando o cliente perguntar por vagas, disponibilidade ou enviar datas de viagem (ex: 10 a 12 de abril). Consulta o sistema HQBeds e retorna se há quartos livres e os tokens necessários para reserva.",
         "workflowId": {
           "__rl": true,
           "value": "nXhQGi4iFi7PCFtkyAVt-",

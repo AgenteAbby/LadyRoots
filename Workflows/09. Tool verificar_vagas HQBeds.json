@@ -43,6 +43,7 @@
           ]
         },
         "options": {
+          "allowUnauthorizedCerts": true,
           "response": {
             "response": {
               "fullResponse": true
@@ -50,6 +51,7 @@
           }
         }
       },
+      "continueOnFail": true,
       "id": "7ea29ad2-3a62-4b04-bea8-7db3c8db40ef",
       "name": "Login",
       "type": "n8n-nodes-base.httpRequest",
@@ -78,11 +80,11 @@
           "parameters": [
             {
               "name": "from",
-              "value": "={{ $node['Executar Workflow Trigger'].json['data_inicio'] || '10/03/2026' }}"
+              "value": "={{ $('Executar Workflow Trigger').first().json.data_inicio || '10/03/2026' }}"
             },
             {
               "name": "to",
-              "value": "={{ $node['Executar Workflow Trigger'].json['data_fim'] || '12/03/2026' }}"
+              "value": "={{ $('Executar Workflow Trigger').first().json.data_fim || '12/03/2026' }}"
             },
             {
               "name": "adults",
@@ -99,6 +101,7 @@
           ]
         },
         "options": {
+          "allowUnauthorizedCerts": true,
           "response": {
             "response": {
               "responseFormat": "text"
@@ -106,6 +109,7 @@
           }
         }
       },
+      "continueOnFail": true,
       "id": "b1041e66-d181-4a7b-b7c4-ea8e56ff5e91",
       "name": "Consultar Vagas HTML",
       "type": "n8n-nodes-base.httpRequest",
@@ -117,7 +121,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const html = $input.first().json.data || '';\nconst regex = /name=\"units\\[(\\d+)\\]\\[serialized_price_info\\]\"\\s*value=\"([^\"]+)\"/g;\nlet match; let achou = false;\nlet md = \"\\n🏨 **RESULTADO DA BUSCA DE VAGAS**\\n\\n\";\nconst nomes = [{id: 'Aventureiro', nome: 'Suíte Aventureiro'}, {id: 'Lagoa Azul', nome: 'Suíte Lagoa Azul'}, {id: 'Pico do Papagaio', nome: 'Pico do Papagaio'}];\n\nwhile ((match = regex.exec(html)) !== null) {\n  achou = true;\n  const idQ = match[1]; const token = match[2];\n  let nomeId = \"Quarto (ID \"+idQ+\")\";\n  md += `✅ **${nomeId}**\\n- **ID para Reserva:** \\`${idQ}\\`\\n- **Token Serializado:** \\`${token}\\`\\n\\n`;\n}\n\nif (!achou) {\n  md = \"❌ **Nenhuma vaga encontrada** para as datas solicitadas.\\nSugira ao cliente tentar outras datas.\";\n} else {\n  md += \"---\\n📌 **INSTRUÇÃO PARA A IA:**\\nAbaixo estão as vagas encontradas. Avise o cliente e SE ELE CONFIRMAR O AGENDAMENTO, use a ferramenta criar_reserva usando o ID e Token Serializado acima.\";\n}\n\nreturn { json: { dados_markdown_para_ia: md } };"
+        "jsCode": "try {\n  const json = $input.first().json;\n\n  if (json.error) {\n    return [{ json: { response: \"❌ ERRO NA BUSCA:\\nO sistema HQBeds retornou um erro interno ou timeout ao buscar as datas solicitadas. Peça desculpas ao cliente e diga que o sistema de reservas está instável no momento.\" } }];\n  }\n\n  const html = json.data || '';\n  if (!html) {\n     return [{ json: { response: \"❌ ERRO NA BUSCA:\\nNão foi possível obter a resposta do HQBeds. O conteúdo retornou vazio.\" } }];\n  }\n\n  const regex = /name=\"units\\[(\\d+)\\]\\[serialized_price_info\\]\"\\s*value=['\"]([^'\"]+)['\"]/g;\n  let match;\n  let achou = false;\n  let md = \"\\n🏨 **RESULTADO DA BUSCA DE VAGAS**\\n\\n\";\n\n  while ((match = regex.exec(html)) !== null) {\n    achou = true;\n    const idQ = match[1];\n    const token = match[2];\n    let nomeId = \"Quarto (ID \" + idQ + \")\";\n    md += `✅ **${nomeId}**\\n- **ID para Reserva:** \\`${idQ}\\`\\n- **Token Serializado:** \\`${token}\\`\\n\\n`;\n  }\n\n  if (!achou) {\n    md = \"❌ **Nenhuma vaga encontrada** para as datas solicitadas.\\nSugira ao cliente tentar outras datas.\";\n  } else {\n    md += \"---\\n📌 **INSTRUÇÃO PARA A IA:**\\nAbaixo estão as vagas encontradas. Avise o cliente e SE ELE CONFIRMAR O AGENDAMENTO, use a ferramenta criar_reserva usando o ID e Token Serializado acima.\";\n  }\n\n  return [{ json: { response: md } }];\n\n} catch (e) {\n  return [{ json: { response: \"❌ ERRO NA BUSCA:\\nFalha ao processar o retorno do HQBeds: \" + e.message } }];\n}"
       },
       "id": "40ae1a5d-e6e0-4dbf-82f5-e1f4fd8ced32",
       "name": "Gerar Resumo em MD",
