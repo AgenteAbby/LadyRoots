@@ -1,0 +1,184 @@
+{
+  "name": "verificar_vagas",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "641366a4-919d-4ccb-a452-89d971647e68",
+      "name": "Executar Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        7936,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/auth/login",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tenant",
+              "value": "ladyroots1"
+            },
+            {
+              "name": "identity",
+              "value": "lady.rootsilhagrande@gmail.com"
+            },
+            {
+              "name": "password",
+              "value": "milena#roots!"
+            },
+            {
+              "name": "remember",
+              "value": "1"
+            },
+            {
+              "name": "from",
+              "value": "hq/home"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "760adf63-f566-45c1-b9ce-e26887df8b8e",
+      "name": "Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        8144,
+        880
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/booking/period_reservation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.headers['set-cookie'] ? $json.headers['set-cookie'].join('; ') : '' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $('Executar Workflow Trigger').first().json.data_inicio || '10/03/2026' }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('Executar Workflow Trigger').first().json.data_fim || '12/03/2026' }}"
+            },
+            {
+              "name": "adults",
+              "value": "1"
+            },
+            {
+              "name": "children",
+              "value": "0"
+            },
+            {
+              "name": "buscarBt",
+              "value": "Buscar"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "0abe45c1-51aa-4fce-8dca-5b210de9a1f9",
+      "name": "Consultar Vagas HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        8336,
+        880
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  const json = $input.first().json;\n\n  if (json.error) {\n    return [{ json: {\n      sucesso: false,\n      mensagem: \"A Busca falhou devido a um erro no servidor HQBeds.\",\n      detalhes: \"Erro interno no nó 'Consultar Vagas HTML' (TimeOut ou 500).\"\n    } }];\n  }\n\n  const html = json.data || '';\n  if (!html) {\n     return [{ json: {\n       sucesso: false,\n       mensagem: \"A Busca falhou. Resposta vazia.\",\n       detalhes: \"O conteúdo da página no nó 'Consultar Vagas HTML' retornou vazio.\"\n     } }];\n  }\n\n  const rows = html.split('<tr');\n  let achou = false;\n  let md = \"\\n🏨 **RESULTADO DA BUSCA DE VAGAS PARA RESERVA**\\n\\n\";\n\n  for (const row of rows) {\n    if (row.includes('class=\"serialized_price_info\"')) {\n      const nameMatch = row.match(/class=\"m-b-0 text-left room_name\">[^a-zA-Z]*(.*?)<\\/td>/s);\n      const idTokenMatch = row.match(/name=\"units\\[(\\d+)\\]\\[serialized_price_info\\]\"\\s*value=['\"]([^'\"]+)['\"]/);\n      if (nameMatch && idTokenMatch) {\n        achou = true;\n        const suiteName = nameMatch[1].replace(/\\s+/g, ' ').trim();\n        const idQ = idTokenMatch[1];\n        const token = idTokenMatch[2];\n        md += `✅ **${suiteName} (ID ${idQ})**\\n- **ID para Reserva:** \\`${idQ}\\`\\n- **Token Serializado:** \\`${token}\\`\\n\\n`;\n      }\n    }\n  }\n\n  if (!achou) {\n    return [{ json: {\n      sucesso: true,\n      mensagem: \"Nenhuma vaga encontrada para as datas (Lotação esgotada).\",\n      detalhes: \"Sugira ao cliente tentar outras datas.\"\n    } }];\n  }\n\n  md += \"---\\n📌 **INSTRUÇÃO OBRIGATÓRIA PARA A IA:**\\nAbaixo estão as vagas encontradas. Avise o cliente usando sua linguagem amigável. SE ELE CONFIRMAR A VONTADE DE RESERVAR, use a ferramenta criar_reserva usando o ID e Token Serializado acima.\";\n\n  return [{ json: {\n    sucesso: true,\n    mensagem: \"Vagas encontradas com DESTAQUE! Leia os detalhes.\",\n    detalhes: md\n  } }];\n\n} catch (e) {\n  return [{ json: {\n    sucesso: false,\n    mensagem: \"Erro Javascript ao buscar vagas no nó 'Gerar Resumo em MD'.\",\n    detalhes: e.message\n  } }];\n}"
+      },
+      "id": "9fdaba41-c7e2-43ea-a4ae-e29010fb3c9f",
+      "name": "Gerar Resumo em MD",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8528,
+        880
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Executar Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "Consultar Vagas HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Vagas HTML": {
+      "main": [
+        [
+          {
+            "node": "Gerar Resumo em MD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ec4e54a7-cee2-4141-91fa-a15a099ea2e4",
+  "meta": {
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "nXhQGi4iFi7PCFtkyAVt-",
+  "tags": []
+}

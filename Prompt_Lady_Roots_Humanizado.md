@@ -22,8 +22,10 @@ Você possui ferramentas de sistema (Tools/Functions) que DEVE acionar em silên
 **2.1 Verificar Vagas (`verificar_vagas`)**
 - **Uso:** Acionar imediatamente quando o cliente solicitar reservas ou informar check-in/out.
 - **Parâmetros Obrigatórios:** 
+  • `acao`: Sempre preencher com o valor `"consultar"`.
   • `data_inicio`: Estritamente no formato DD/MM/YYYY.
   • `data_fim`: Estritamente no formato DD/MM/YYYY.
+  • `suite`: Preencher com o nome da suíte se o cliente especificar, ou deixar em branco `""` se ele quiser ver as vagas de maneira geral.
 *(Nota temporal: Um cliente que sai às 10h libera a mesma suíte para quem entra às 14h do mesmo dia).*
 
 **2.2 Criar Reserva (`criar_reserva`)**

@@ -1,0 +1,55 @@
+{
+  "name": "calcular_estadia",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "6df1a595-7339-4120-989b-4f7b98a07d7f",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  const input = $input.item.json;\n  \n  // Base de Dados Estruturada (Hardcoded)\n  const db = {\n    hospedagem: {\n      fevereiro: { fds: 450, sem: 400, extra: 100 },\n      marco: { fds: 400, sem: 350, extra: 70 },\n      abril: { fds: 350, sem: 300, extra: 70 },\n      maio: { fds: 300, sem: 250, extra: 70 },\n      loft: 50,\n      pet: 100\n    },\n    passeios: {\n      ilhas: { valor: 150 }, // Assumindo baixa por padrão, a IA não precisa distinguir pra complexidade agora\n      gruta: { valor: 150 },\n      meia_volta: { valor: 120 },\n      volta_ilha: { valor: 200 },\n      super_aventureiro: { valor: 250 },\n      lopes_mendes: { valor: 90 }\n    }\n  };\n\n  let total = 0;\n  let descritivo = [];\n\n  // Tratamento de Hospedagem\n  if (input.tipo_calculo === 'hospedagem') {\n    const mesTarget = input.mes ? input.mes.toLowerCase().replace('ç', 'c') : 'maio';\n    const tarifa = db.hospedagem[mesTarget] || db.hospedagem['maio'];\n    \n    const adultosPagantes = Math.max(1, input.adultos || 2);\n    const diasFDS = input.dias_fds || 0;\n    const diasSem = input.dias_semana || 0;\n    const totalDias = diasFDS + diasSem;\n\n    // Regra Tarifa Base (Até 2 pessoas)\n    const baseFDS = diasFDS * tarifa.fds;\n    const baseSem = diasSem * tarifa.sem;\n    let valorAcomodacao = baseFDS + baseSem;\n\n    // Hospedes Extras (Acima de 2 adultos)\n    if (adultosPagantes > 2) {\n       const extrasAdultos = adultosPagantes - 2;\n       valorAcomodacao += (extrasAdultos * tarifa.extra * totalDias);\n    }\n\n    // Tratamento de Crianças (Hospedagem)\n    let valorCriancas = 0;\n    if (input.idades_criancas && Array.isArray(input.idades_criancas)) {\n       input.idades_criancas.forEach(idade => {\n          if (idade > 5 && idade <= 10) {\n             valorCriancas += ((tarifa.extra / 2) * totalDias);\n          } else if (idade > 10) {\n             valorCriancas += (tarifa.extra * totalDias);\n          }\n       });\n    }\n    valorAcomodacao += valorCriancas;\n\n    // Desconto Prime Gourmet (30% sobre acomodação)\n    if (input.prime_gourmet) {\n      valorAcomodacao = valorAcomodacao * 0.70;\n      descritivo.push('Desconto Prime Gourmet (-30%) aplicado.');\n    }\n\n    // Extras Fixos (Loft e Pet)\n    let valorAdicionais = 0;\n    if (input.extras && Array.isArray(input.extras)) {\n      if (input.extras.includes('loft')) {\n        valorAdicionais += (db.hospedagem.loft * totalDias);\n      }\n      if (input.extras.includes('pet')) {\n        valorAdicionais += db.hospedagem.pet; // Taxa unica\n      }\n    }\n\n    total = valorAcomodacao + valorAdicionais;\n    descritivo.unshift(`Orçamento Hospedagem (${totalDias} noites em ${mesTarget})`);\n  }\n\n  // Tratamento de Passeios\n  else if (input.tipo_calculo === 'passeio') {\n    const passTarget = input.passeio_alvo ? input.passeio_alvo.toLowerCase() : 'super_aventureiro';\n    const tarifaPass = db.passeios[passTarget] ? db.passeios[passTarget].valor : 250;\n    \n    const adultosPass = input.adultos || 2;\n    let valorPass = adultosPass * tarifaPass;\n\n    // Tratamento de Crianças (Passeio)\n    if (input.idades_criancas && Array.isArray(input.idades_criancas)) {\n       input.idades_criancas.forEach(idade => {\n          if (idade >= 5 && idade <= 8) {\n             valorPass += (tarifaPass * 0.50);\n          } else if (idade > 8) {\n             valorPass += tarifaPass;\n          }\n       });\n    }\n    total = valorPass;\n    descritivo.unshift(`Orçamento Passeio (${passTarget})`);\n  }\n\n  // Regra Obrigatória: Sinal de 30%\n  const sinal = total * 0.30;\n  const resto = total - sinal;\n\n  return [{\n    json: {\n      sucesso: true,\n      mensagem: \"Cálculo executado com perfeição. Repassar valores ao cliente.\",\n      detalhes: descritivo.join(' | '),\n      valor_total: total.toFixed(2),\n      valor_sinal: sinal.toFixed(2),\n      valor_restante_checkin: resto.toFixed(2)\n   }\n  }];\n\n} catch (error) {\n  return [{\n    json: {\n      sucesso: false,\n      mensagem: \"A Tool não conseguiu calcular. Você deve ter passado um JSON ou variável inválida. Avise o cliente e escale para o Humano.\",\n      erro: error.message\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        -272
+      ],
+      "id": "407dabc9-b291-48a1-9509-dc8c8b39d6f2",
+      "name": "Regras e Matemática"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Regras e Matemática",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "777ba084-307c-4a36-8be3-6a224f4e59a2",
+  "meta": {
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "w7VHHRDY0qUF_YJ70g3iR",
+  "tags": []
+}
