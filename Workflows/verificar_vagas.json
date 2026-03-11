@@ -3,13 +3,13 @@
   "nodes": [
     {
       "parameters": {},
-      "id": "c7589c8a-69e0-4426-b2a4-356f146aafcb",
+      "id": "641366a4-919d-4ccb-a452-89d971647e68",
       "name": "Executar Workflow Trigger",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        7936,
+        880
       ]
     },
     {
@@ -51,15 +51,15 @@
           }
         }
       },
-      "continueOnFail": true,
-      "id": "7ea29ad2-3a62-4b04-bea8-7db3c8db40ef",
+      "id": "760adf63-f566-45c1-b9ce-e26887df8b8e",
       "name": "Login",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        208,
-        0
-      ]
+        8144,
+        880
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -109,27 +109,27 @@
           }
         }
       },
-      "continueOnFail": true,
-      "id": "b1041e66-d181-4a7b-b7c4-ea8e56ff5e91",
+      "id": "0abe45c1-51aa-4fce-8dca-5b210de9a1f9",
       "name": "Consultar Vagas HTML",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        400,
-        0
-      ]
+        8336,
+        880
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
         "jsCode": "try {\n  const json = $input.first().json;\n\n  if (json.error) {\n    return [{ json: {\n      sucesso: false,\n      mensagem: \"A Busca falhou devido a um erro no servidor HQBeds.\",\n      detalhes: \"Erro interno no nó 'Consultar Vagas HTML' (TimeOut ou 500).\"\n    } }];\n  }\n\n  const html = json.data || '';\n  if (!html) {\n     return [{ json: {\n       sucesso: false,\n       mensagem: \"A Busca falhou. Resposta vazia.\",\n       detalhes: \"O conteúdo da página no nó 'Consultar Vagas HTML' retornou vazio.\"\n     } }];\n  }\n\n  const regex = /name=\"units\\[(\\d+)\\]\\[serialized_price_info\\]\"\\s*value=['\"]([^'\"]+)['\"]/g;\n  let match;\n  let achou = false;\n  let md = \"\\n🏨 **RESULTADO DA BUSCA DE VAGAS PARA RESERVA**\\n\\n\";\n\n  while ((match = regex.exec(html)) !== null) {\n    achou = true;\n    const idQ = match[1];\n    const token = match[2];\n    let nomeId = \"Quarto (ID \" + idQ + \")\";\n    md += `✅ **${nomeId}**\\n- **ID para Reserva:** \\`${idQ}\\`\\n- **Token Serializado:** \\`${token}\\`\\n\\n`;\n  }\n\n  if (!achou) {\n    return [{ json: {\n      sucesso: true,\n      mensagem: \"Nenhuma vaga encontrada para as datas (Lotação esgotada).\",\n      detalhes: \"Sugira ao cliente tentar outras datas.\"\n    } }];\n  }\n\n  md += \"---\\n📌 **INSTRUÇÃO OBRIGATÓRIA PARA A IA:**\\nAbaixo estão as vagas encontradas. Avise o cliente usando sua linguagem amigável. SE ELE CONFIRMAR A VONTADE DE RESERVAR, use a ferramenta criar_reserva usando o ID e Token Serializado acima.\";\n\n  return [{ json: {\n    sucesso: true,\n    mensagem: \"Vagas encontradas com DESTAQUE! Leia os detalhes.\",\n    detalhes: md\n  } }];\n\n} catch (e) {\n  return [{ json: {\n    sucesso: false,\n    mensagem: \"Erro Javascript ao buscar vagas no nó 'Gerar Resumo em MD'.\",\n    detalhes: e.message\n  } }];\n}"
       },
-      "id": "40ae1a5d-e6e0-4dbf-82f5-e1f4fd8ced32",
+      "id": "9fdaba41-c7e2-43ea-a4ae-e29010fb3c9f",
       "name": "Gerar Resumo em MD",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        592,
-        0
+        8528,
+        880
       ]
     }
   ],
@@ -167,20 +167,15 @@
           }
         ]
       ]
-    },
-    "Gerar Resumo em MD": {
-      "main": [
-        []
-      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "5acc0e0a-5b6d-4f3a-9c6a-928d27857c98",
+  "versionId": "ec4e54a7-cee2-4141-91fa-a15a099ea2e4",
   "meta": {
     "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
   },

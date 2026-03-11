@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        3872,
-        -4784
+        -3840,
+        1152
       ],
-      "id": "33eda29a-3cf3-42be-aadf-6be0bb39e8dc",
+      "id": "a76cbc89-c107-4c64-b9d5-d0a395aee5b4",
       "name": "Mensagem recebida",
       "webhookId": "f6ddc488-8680-4351-84dd-d9e73b2d102d"
     },
@@ -24,10 +24,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5808,
-        -4768
+        -1904,
+        1168
       ],
-      "id": "5931caf3-bd78-4592-84f2-3aa5e044848b",
+      "id": "a6e9346d-80db-4d39-acdf-f2de8a8c0025",
       "name": "Mensagem encavalada?"
     },
     {
@@ -64,10 +64,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        5584,
-        -4768
+        -2128,
+        1168
       ],
-      "id": "b7c7e7b8-d088-452f-a94b-2213e655cf16",
+      "id": "ed59244d-8dbe-4d80-b6ec-76b467602f0f",
       "name": "Buscar mensagens",
       "credentials": {
         "postgres": {
@@ -103,10 +103,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        6032,
-        -4768
+        -1680,
+        1168
       ],
-      "id": "fdb5e6d6-3f24-486d-9e17-69a68d9466bf",
+      "id": "a27a8af5-7cb6-4559-8a3c-cc425a87f2c0",
       "name": "Limpar fila de mensagens",
       "credentials": {
         "postgres": {
@@ -125,10 +125,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4864,
-        -4960
+        -2848,
+        976
       ],
-      "id": "bbc01f8e-08db-402b-90b9-085aa79df843",
+      "id": "91db3593-7595-4716-a08b-8db17f24489b",
       "name": "Sticky Note2"
     },
     {
@@ -138,27 +138,27 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        5376,
-        -4768
+        -2336,
+        1168
       ],
-      "id": "8c2dd068-8c83-4123-8b09-576df554a9ba",
+      "id": "942e6578-d191-4e19-bf8e-77ee91dcc27e",
       "name": "Esperar",
       "webhookId": "689b51a0-89fe-459d-a560-a59c79797611"
     },
     {
       "parameters": {
         "content": "# Gerando resposta",
-        "height": 940,
+        "height": 876,
         "width": 2176,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        6736,
-        -4944
+        -976,
+        992
       ],
-      "id": "1982ef4d-7b8c-468e-90fa-a4d871e057f4",
+      "id": "7d10ce4e-a0a6-4206-9c60-781b41c32bc7",
       "name": "Sticky Note3"
     },
     {
@@ -171,10 +171,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        8960,
-        -4944
+        1248,
+        992
       ],
-      "id": "76f1ab8c-d363-42da-96e2-b6c0227767f2",
+      "id": "397f7f36-254b-4702-85e5-720c39b45217",
       "name": "Sticky Note4"
     },
     {
@@ -186,10 +186,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3792,
-        -4960
+        -3920,
+        976
       ],
-      "id": "432fc7a5-f68b-4615-a875-84553f18509b",
+      "id": "3b2ac381-9977-4a73-aba2-61dc20e8d2fc",
       "name": "Sticky Note5"
     },
     {
@@ -253,10 +253,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        4928,
-        -4752
+        -2784,
+        1184
       ],
-      "id": "65e0df24-59dc-4f04-810f-bf935945e0b8",
+      "id": "9acb13fd-78a6-4fdf-a272-702d528b5fe7",
       "name": "Tipo de mensagem"
     },
     {
@@ -269,10 +269,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        4864,
-        -4384
+        -2848,
+        1552
       ],
-      "id": "5e778e49-5d91-4f96-b453-ad972a945b67",
+      "id": "1677899e-d732-4406-9237-d4b13325f9ed",
       "name": "Sticky Note6"
     },
     {
@@ -285,10 +285,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5984,
-        -4960
+        -1728,
+        976
       ],
-      "id": "8fb1f857-2f85-43ae-9c54-756a6c967ef2",
+      "id": "bcc1b9fb-6437-4670-a9d2-fbe2934a5fc2",
       "name": "Sticky Note12"
     },
     {
@@ -301,10 +301,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        7824,
-        -4544
+        112,
+        1392
       ],
-      "id": "85acf64e-8e7e-4c56-80cd-3e66a2fcee54",
+      "id": "ebdbab4b-3d28-445d-bbc5-909e1b9f5de5",
       "name": "Memory",
       "credentials": {
         "postgres": {
@@ -320,10 +320,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolThink",
       "typeVersion": 1,
       "position": [
-        7920,
-        -4544
+        208,
+        1392
       ],
-      "id": "4da7f32c-27c5-4a08-aa03-da40c1cd0633",
+      "id": "5ee9570e-4d41-4427-b33e-2072fc563942",
       "name": "Refletir"
     },
     {
@@ -343,10 +343,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6272,
-        -4768
+        -1440,
+        1168
       ],
-      "id": "a71f0052-05f5-40ab-889f-06253006166a",
+      "id": "e2859f68-e20b-4554-b495-0b90f08db442",
       "name": "Marcar como lidas",
       "credentials": {
         "chatwootApi": {
@@ -381,10 +381,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        6496,
-        -4768
+        -1216,
+        1168
       ],
-      "id": "a6d89ba6-6217-4a73-b97f-d273aa0dcab9",
+      "id": "7d49e4cb-08af-4e2c-ab15-7b70d0616179",
       "name": "Digitando/Gravando...",
       "credentials": {
         "chatwootApi": {
@@ -416,10 +416,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        6800,
-        -4768
+        -912,
+        1168
       ],
-      "id": "ea0b68f9-e87c-4cae-8a9d-4475cb9b677b",
+      "id": "ded5ff72-e2f3-4ee9-a60e-6c3c66759aed",
       "name": "Set mensagens",
       "executeOnce": true
     },
@@ -433,10 +433,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4992,
-        -4240
+        -2720,
+        1696
       ],
-      "id": "de7fbf74-4479-4ca0-a760-8be5249791aa",
+      "id": "18944eb3-12b6-40b4-bacf-2e8ee1042185",
       "name": "Download Ã¡udio",
       "credentials": {
         "chatwootApi": {
@@ -453,10 +453,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        5264,
-        -4240
+        -2448,
+        1696
       ],
-      "id": "8ae03833-dc31-4761-9d23-eceec0fcdca7",
+      "id": "881dc0d3-6217-4d23-923c-a8ec14b3f072",
       "name": "Extract from File"
     },
     {
@@ -468,10 +468,10 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        5536,
-        -4240
+        -2176,
+        1696
       ],
-      "id": "7d6d8144-6784-40a5-9342-92b9567783ee",
+      "id": "077b4164-84a7-410e-af03-13040b2ae3d0",
       "name": "Convert to File"
     },
     {
@@ -500,10 +500,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        9072,
-        -4768
+        1360,
+        1168
       ],
-      "id": "e28967b2-e608-4fe1-a98d-c20c167696d1",
+      "id": "ec073b7c-2c0c-496d-a12d-2b18e91a06ea",
       "name": "Resetar status",
       "credentials": {
         "chatwootApi": {
@@ -532,10 +532,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        9376,
-        -4768
+        1664,
+        1168
       ],
-      "id": "8797c5cd-2663-4150-b82f-2187334e5fa5",
+      "id": "b50b140b-5f96-4add-ad72-70bdfb0f4451",
       "name": "Enviar texto.",
       "credentials": {
         "chatwootApi": {
@@ -621,10 +621,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        4144,
-        -4784
+        -3568,
+        1152
       ],
-      "id": "ae752205-47a6-480a-898e-97aeac24442e",
+      "id": "9512c37e-8819-49a9-8305-fb26ac3013e2",
       "name": "Info"
     },
     {
@@ -723,10 +723,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        8560,
-        -4240
+        848,
+        1648
       ],
-      "id": "57496f11-bbaf-45f4-b3bf-17119b1bbaa5",
+      "id": "a41637a0-f473-4ffb-99e2-fb276e688e76",
       "name": "Escalar humano"
     },
     {
@@ -740,10 +740,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        5776,
-        -4240
+        -1936,
+        1696
       ],
-      "id": "321b91ad-ad03-4a82-a2c0-13aa514470db",
+      "id": "a6c94865-2116-4ca8-a288-9065163c7b0d",
       "name": "Transcrever audio",
       "credentials": {
         "openAiApi": {
@@ -789,10 +789,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        6832,
-        -4240
+        -880,
+        1648
       ],
-      "id": "821c61f5-5c55-4c79-b9a8-38956539adb1",
+      "id": "53893bfb-9fcc-409a-b0ba-f203a441992c",
       "name": "consulta_site"
     },
     {
@@ -832,10 +832,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        6976,
-        -4240
+        -736,
+        1648
       ],
-      "id": "2e0fc544-1a7c-4c9e-bf14-020b8c933a3a",
+      "id": "74d491e3-3962-46e7-b7c8-a1d789ae9542",
       "name": "consulta_instagram"
     },
     {
@@ -862,10 +862,10 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        7040,
-        -4768
+        -672,
+        1168
       ],
-      "id": "97ad2c7d-c056-4ee0-8214-c59e1dc0a1c8",
+      "id": "f1fb8b22-7eca-43c1-8428-b761c6fd3352",
       "name": "Get a file",
       "webhookId": "8c20f800-28ef-4711-ab25-436ede4684a9",
       "credentials": {
@@ -883,10 +883,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        7264,
-        -4768
+        -448,
+        1168
       ],
-      "id": "8da919f6-360f-4286-bf88-d2cead2bd489",
+      "id": "6de12622-4d12-4b13-8155-6b0283ee224a",
       "name": "Extract from File1"
     },
     {
@@ -907,10 +907,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        7472,
-        -4768
+        -240,
+        1168
       ],
-      "id": "7c395596-6155-4972-8105-58dc9902cf6f",
+      "id": "1a3512bd-cf55-4c87-9d7d-6f92c16510ee",
       "name": "Data & Hora"
     },
     {
@@ -993,10 +993,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        5168,
-        -4768
+        -2544,
+        1168
       ],
-      "id": "320ac1fa-38e4-4f79-b794-af970aa509b0",
+      "id": "0c5cf376-7ceb-4dc0-bc1a-8c097cf33314",
       "name": "Enfileirar mensagem",
       "credentials": {
         "postgres": {
@@ -1016,10 +1016,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        7728,
-        -4768
+        16,
+        1168
       ],
-      "id": "f43184ed-e428-4e9b-a6fe-f75cfe133db0",
+      "id": "69f86223-3c7d-418f-9b9b-9019cf14c929",
       "name": "AI Agent"
     },
     {
@@ -1029,10 +1029,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        8384,
-        -4768
+        672,
+        1168
       ],
-      "id": "ca2a6d54-9987-4fda-be88-d655a43bdcbd",
+      "id": "9963986a-9d08-4a7c-b413-d844eb6b15b9",
       "name": "Formatar texto"
     },
     {
@@ -1074,10 +1074,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        4656,
-        -4752
+        -3056,
+        1184
       ],
-      "id": "8c62a307-b8ab-4689-ab8f-8e0949af73a3",
+      "id": "2a091e0c-3602-4903-80f7-b994c396a7e5",
       "name": "Mensagem chegando2?"
     },
     {
@@ -1105,10 +1105,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
       "typeVersion": 1.1,
       "position": [
-        8416,
-        -4240
+        704,
+        1648
       ],
-      "id": "d3163cf7-5ce4-4f08-9e51-56c0fd547a5d",
+      "id": "640d0ca6-5eab-49ce-a39b-9b5d678360bf",
       "name": "Reagir mensagem",
       "credentials": {
         "chatwootApi": {
@@ -1137,10 +1137,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5328,
-        -5504
+        -2384,
+        432
       ],
-      "id": "997409e7-dcfa-494e-a363-6052a0679ed9",
+      "id": "2c7c1f91-8bf0-4443-82f0-5b8669a7781a",
       "name": "Limpar etiquetas",
       "credentials": {
         "chatwootApi": {
@@ -1169,10 +1169,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5888,
-        -5504
+        -1824,
+        432
       ],
-      "id": "80dd213c-c1f1-41ce-8fe9-b5fe4d69b935",
+      "id": "e22c0c3d-4d06-4678-a288-d9f544ef7cdd",
       "name": "Enviar memória resetada",
       "credentials": {
         "chatwootApi": {
@@ -1208,10 +1208,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        4944,
-        -5504
+        -2768,
+        432
       ],
-      "id": "b59bae8b-a9cc-42c6-bc85-117d51aee3c0",
+      "id": "47804bf2-7a94-4699-b437-0104cdee2358",
       "name": "Limpar memória",
       "credentials": {
         "postgres": {
@@ -1231,10 +1231,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5136,
-        -5504
+        -2576,
+        432
       ],
-      "id": "d066154e-bcf4-47d8-b1c1-a696bdd58251",
+      "id": "8a350fea-dd2c-4923-a055-203baeb3878c",
       "name": "Resetar atributos",
       "credentials": {
         "chatwootApi": {
@@ -1270,10 +1270,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        5712,
-        -5504
+        -2000,
+        432
       ],
-      "id": "f1694fb4-e915-4b5c-bef4-42486da97de5",
+      "id": "e744754a-998e-4d9b-8da0-d122770429a7",
       "name": "Limpar fila de mensagens1",
       "credentials": {
         "postgres": {
@@ -1291,11 +1291,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4864,
-        -5600
+        -2848,
+        336
       ],
       "typeVersion": 1,
-      "id": "5415ea06-9e04-459b-b988-84fe2b34c4da",
+      "id": "20ec92e1-6eab-4c01-8459-0d4224fc0a16",
       "name": "Sticky Note",
       "disabled": true
     },
@@ -1362,10 +1362,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        4400,
-        -4800
+        -3312,
+        1136
       ],
-      "id": "92c0f687-bd33-42c0-84d9-27b2518b7b74",
+      "id": "79067d22-63cb-4e23-be16-99192da14b24",
       "name": "Reset ou teste"
     },
     {
@@ -1388,10 +1388,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        4944,
-        -5168
+        -2768,
+        768
       ],
-      "id": "68d24e1f-2634-47c8-8bc6-42976929c8bf",
+      "id": "1893c932-97a5-4b7b-b97b-6056f1c2e511",
       "name": "Colocar etiqueta testando-agente",
       "credentials": {
         "chatwootApi": {
@@ -1420,10 +1420,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        5152,
-        -5168
+        -2560,
+        768
       ],
-      "id": "b1cb7966-86f6-42bb-9bf6-e06da82d7c16",
+      "id": "06c69ec3-3112-4973-8f47-11b22178b3a3",
       "name": "Enviar teste habilitado",
       "credentials": {
         "chatwootApi": {
@@ -1441,11 +1441,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4864,
-        -5280
+        -2848,
+        656
       ],
       "typeVersion": 1,
-      "id": "086b6622-53cd-4c83-b95f-4b332df14826",
+      "id": "dcf893d9-db82-4563-b493-f3d7e0ee2c6f",
       "name": "Sticky Note7",
       "disabled": true
     },
@@ -1511,10 +1511,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        5520,
-        -5504
+        -2192,
+        432
       ],
-      "id": "f6561975-cc83-4689-b010-e1e97141bcc8",
+      "id": "8872da26-44f2-48f8-9d94-1509cffe293b",
       "name": "Resetar status atendimento",
       "credentials": {
         "postgres": {
@@ -1542,10 +1542,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        7712,
-        -4544
+        0,
+        1392
       ],
-      "id": "b1bd4891-ea36-47d1-a259-cea534a45949",
+      "id": "2b37ec2f-8d29-49e4-b4a7-1e219c475bb5",
       "name": "OpenAI",
       "credentials": {
         "openAiApi": {
@@ -1569,10 +1569,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        7152,
-        -4240
+        -576,
+        1648
       ],
-      "id": "496e2773-e5de-4f7a-95ff-9d5cd3af507f",
+      "id": "ebe2f7fe-2ce3-4dbf-9472-3fa5c5c7f2d2",
       "name": "calcular_estadia"
     },
     {
@@ -1583,11 +1583,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        6800,
-        -4336
+        -912,
+        1552
       ],
       "typeVersion": 1,
-      "id": "9ff362da-bfb5-4111-b7ca-ef2c8092e666",
+      "id": "9ea2e7cf-554c-4c45-bc08-47fb58e26d50",
       "name": "Sticky Note1"
     },
     {
@@ -1599,17 +1599,23 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        7312,
-        -4336
+        -400,
+        1552
       ],
       "typeVersion": 1,
-      "id": "3ca0581b-168a-4769-bc2d-9731e58f23e3",
+      "id": "6a7388d0-167d-491e-bc89-a2a4c9a073d9",
       "name": "Sticky Note8"
     },
     {
       "parameters": {
-        "name": "criar_reserva",
         "description": "Ferramenta para efetivar a reserva no sistema. OBRIGATÓRIO usar apenas DEPOIS que a ferramenta verificar_vagas encontrar a suíte e o hóspede confirmar a intenção.",
+        "workflowId": {
+          "__rl": true,
+          "value": "VwW9wG1_9-8kMgvPqC20p",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VwW9wG1_9-8kMgvPqC20p",
+          "cachedResultName": "05. Tool criar_reserva HQBeds"
+        },
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
@@ -1624,33 +1630,77 @@
           },
           "matchingColumns": [],
           "schema": [
-            { "id": "data_inicio", "displayName": "data_inicio", "required": true, "display": true, "type": "string", "description": "Ex: 10/03/2026 (formato brasileiro)" },
-            { "id": "data_fim", "displayName": "data_fim", "required": true, "display": true, "type": "string", "description": "Ex: 12/03/2026 (formato brasileiro)"},
-            { "id": "nome_cliente", "displayName": "nome", "required": true, "display": true, "type": "string" },
-            { "id": "sobrenome_cliente", "displayName": "sobrenome", "required": true, "display": true, "type": "string" },
-            { "id": "telefone_cliente", "displayName": "telefone", "required": true, "display": true, "type": "string" },
-            { "id": "id_quarto", "displayName": "id_quarto", "required": true, "display": true, "type": "string" },
-            { "id": "token_serializado", "displayName": "token_serializado", "required": true, "display": true, "type": "string" },
-            { "id": "valor_total", "displayName": "valor_total", "required": true, "display": true, "type": "string", "description": "Obrigatório" }
+            {
+              "id": "data_inicio",
+              "displayName": "data_inicio",
+              "required": true,
+              "display": true,
+              "type": "string",
+              "description": "Ex: 10/03/2026 (formato brasileiro)"
+            },
+            {
+              "id": "data_fim",
+              "displayName": "data_fim",
+              "required": true,
+              "display": true,
+              "type": "string",
+              "description": "Ex: 12/03/2026 (formato brasileiro)"
+            },
+            {
+              "id": "nome_cliente",
+              "displayName": "nome",
+              "required": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "sobrenome_cliente",
+              "displayName": "sobrenome",
+              "required": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "telefone_cliente",
+              "displayName": "telefone",
+              "required": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "id_quarto",
+              "displayName": "id_quarto",
+              "required": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "token_serializado",
+              "displayName": "token_serializado",
+              "required": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "valor_total",
+              "displayName": "valor_total",
+              "required": true,
+              "display": true,
+              "type": "string",
+              "description": "Obrigatório"
+            }
           ],
           "attemptToConvertTypes": false,
           "convertFieldsToString": false
-        },
-        "workflowId": {
-          "__rl": true,
-          "value": "VwW9wG1_9-8kMgvPqC20p",
-          "mode": "list",
-          "cachedResultUrl": "/workflow/VwW9wG1_9-8kMgvPqC20p",
-          "cachedResultName": "05. Tool criar_reserva HQBeds"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        7632,
-        -4224
+        -80,
+        1664
       ],
-      "id": "aa034571-35c9-4118-b0d6-9ac2980e85a7",
+      "id": "a40adf47-b0bd-43cf-802c-bc4fa54e6ac1",
       "name": "criar_reserva"
     },
     {
@@ -1658,15 +1708,15 @@
         "content": "## Área: Financeiro & Documentos (Back-office)",
         "height": 272,
         "width": 544,
-        "color": 4
+        "color": 2
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        7792,
-        -4336
+        80,
+        1552
       ],
       "typeVersion": 1,
-      "id": "333cba25-4dab-4a49-847c-f0bd34521a3a",
+      "id": "83c2da87-b9e3-41ba-93ee-1529a2ed01e1",
       "name": "Sticky Note9"
     },
     {
@@ -1684,10 +1734,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 1.2,
       "position": [
-        7840,
-        -4240
+        128,
+        1648
       ],
-      "id": "f4f4d2e0-5b9a-4403-8833-e77fa2a35646",
+      "id": "c6ade667-40f1-4e11-9ba0-b4529b0159e9",
       "name": "gerar_cobranca"
     },
     {
@@ -1760,10 +1810,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        8000,
-        -4240
+        288,
+        1648
       ],
-      "id": "9da6933d-4cb5-422a-9739-fda9ae18d70b",
+      "id": "1c577eba-d284-4f9e-a904-e505f29fedde",
       "name": "enviar_documento"
     },
     {
@@ -1784,10 +1834,10 @@
       "type": "n8n-nodes-base.googleDriveTool",
       "typeVersion": 3,
       "position": [
-        8160,
-        -4240
+        448,
+        1648
       ],
-      "id": "60736fa1-039a-48dc-a7a8-5e9a3448aa4e",
+      "id": "26ca074a-1ac8-4367-b285-51fd55271fef",
       "name": "listar_documentos",
       "credentials": {
         "googleDriveOAuth2Api": {
@@ -1806,11 +1856,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        8368,
-        -4336
+        656,
+        1552
       ],
       "typeVersion": 1,
-      "id": "2c7b2cb4-76ca-4055-96ba-ba43adb71eb3",
+      "id": "e3ec5bf3-b01f-4b07-9705-61c82fc166e2",
       "name": "Sticky Note10"
     },
     {
@@ -1824,10 +1874,10 @@
       "type": "n8n-nodes-base.telegramTool",
       "typeVersion": 1.2,
       "position": [
-        8720,
-        -4240
+        1008,
+        1648
       ],
-      "id": "9aa86492-5ac7-4f87-aaab-cd3c926a0e0c",
+      "id": "72e0293a-712f-4928-a25d-fbeceb2e6cc5",
       "name": "avisar_cancelamento",
       "webhookId": "487b54cb-d0a4-492c-847c-3157e0fd7aa0",
       "disabled": true
@@ -1840,16 +1890,15 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1,
       "position": [
-        7488,
-        -4224
+        -224,
+        1664
       ],
-      "id": "1acc0d7a-a9a8-49a5-9aa1-16c86e9e5dd1",
+      "id": "a4558e07-df4b-411a-a2ce-0009172a44a5",
       "name": "atualizar_agenda",
       "disabled": true
     },
     {
       "parameters": {
-        "name": "verificar_vagas",
         "description": "OBRIGATÓRIO USAR IMEDIATAMENTE quando o cliente perguntar por vagas, disponibilidade ou enviar datas de viagem (ex: 10 a 12 de abril). Consulta o sistema HQBeds e retorna se há quartos livres e os tokens necessários para reserva.",
         "workflowId": {
           "__rl": true,
@@ -1865,7 +1914,7 @@
             "data_fim": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('data_fim', ``, 'string') }}",
             "suite": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('suite', ``, 'string') }}",
             "nome_cliente": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome_cliente', ``, 'string') }}",
-            "acao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('acao', `consultar_disponibilidade`, 'string') }}"
+            "acao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('acao', `consultar disponibilidade de vagas.`, 'string') }}"
           },
           "matchingColumns": [
             "data_inicio",
@@ -1931,10 +1980,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        7344,
-        -4224
+        -368,
+        1664
       ],
-      "id": "ab0100e2-e2ce-4bae-ada4-0f13b6178e87",
+      "id": "836c7f67-e028-499d-a4c9-1530eee2ee68",
       "name": "verificar_vagas"
     }
   ],
@@ -2357,17 +2406,6 @@
         ]
       ]
     },
-    "consultar_instagram": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "criar_reserva": {
       "ai_tool": [
         [
@@ -2451,7 +2489,7 @@
     "executionOrder": "v1",
     "availableInMCP": true
   },
-  "versionId": "6107cb42-ecf3-4d77-b167-c2c8a986d607",
+  "versionId": "6061af9f-11f2-4df1-ab2b-f5d2d166b0ad",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"

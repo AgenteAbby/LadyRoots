@@ -1,15 +1,15 @@
 {
-  "name": "11. Tool Calculadora Lady",
+  "name": "calcular_estadia",
   "nodes": [
     {
       "parameters": {},
-      "id": "trigger-calculadora",
+      "id": "6df1a595-7339-4120-989b-4f7b98a07d7f",
       "name": "When Executed by Another Workflow",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -16,
+        -272
       ]
     },
     {
@@ -19,10 +19,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        220,
-        0
+        256,
+        -272
       ],
-      "id": "codigo-calculadora",
+      "id": "407dabc9-b291-48a1-9509-dc8c8b39d6f2",
       "name": "Regras e Matemática"
     }
   ],
@@ -41,6 +41,15 @@
     }
   },
   "active": false,
-  "settings": {},
-  "versionId": "tool-calc-v1"
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "777ba084-307c-4a36-8be3-6a224f4e59a2",
+  "meta": {
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "w7VHHRDY0qUF_YJ70g3iR",
+  "tags": []
 }

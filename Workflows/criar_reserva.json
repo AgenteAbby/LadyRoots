@@ -1,0 +1,208 @@
+{
+  "name": "criar_reserva",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const responseHTML = $input.first().json.data || '';\n\n// Uma forma rústica de garantir que rodou: se devolveu um codigo 200 normal com texto\nconst pareceSucesso = responseHTML.length > 100;\n\nreturn {\n  json: {\n    tentativa_reserva: pareceSucesso ? \"Disparado com Sucesso\" : \"Erro\",\n    msg: \"Formulário com os payloads gerado na ferramenta submetido como se fosse um humano.\"\n  }\n};"
+      },
+      "id": "d74d3738-65ba-4ff1-95ba-9339f92743cf",
+      "name": "Analisar Transação",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/booking/period_reservation",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $json.headers['set-cookie'] ? $json.headers['set-cookie'].join('; ') : '' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $node['Executar Workflow Trigger'].json['data_inicio'] }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $node['Executar Workflow Trigger'].json['data_fim'] }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $node['Executar Workflow Trigger'].json['nome_cliente'] }}"
+            },
+            {
+              "name": "surname",
+              "value": "={{ $node['Executar Workflow Trigger'].json['sobrenome_cliente'] || 'WhatsApp' }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $node['Executar Workflow Trigger'].json['telefone_cliente'] }}@wpp.com"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $node['Executar Workflow Trigger'].json['telefone_cliente'] }}"
+            },
+            {
+              "name": "source",
+              "value": "whatsapp"
+            },
+            {
+              "name": "units[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][1]",
+              "value": "1"
+            },
+            {
+              "name": "units[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][serialized_price_info]",
+              "value": "={{ $node['Executar Workflow Trigger'].json['token_serializado'] }}"
+            },
+            {
+              "name": "prices[{{ $node['Executar Workflow Trigger'].json['id_quarto'] }}][1]",
+              "value": "={{ $node['Executar Workflow Trigger'].json['valor_total'] }}"
+            },
+            {
+              "name": "total",
+              "value": "={{ $node['Executar Workflow Trigger'].json['valor_total'] }}"
+            },
+            {
+              "name": "saveBt",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "aeb0a2b9-7889-41c2-8fa0-5d2c0cfb9184",
+      "name": "Disparar POST de Reserva",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://admin.hqbeds.com.br/hq/auth/login",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tenant",
+              "value": "ladyroots1"
+            },
+            {
+              "name": "identity",
+              "value": "lady.rootsilhagrande@gmail.com"
+            },
+            {
+              "name": "password",
+              "value": "milena#roots!"
+            },
+            {
+              "name": "remember",
+              "value": "1"
+            },
+            {
+              "name": "from",
+              "value": "hq/home"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "04d83118-ac7a-4464-ab46-f39b9fab2963",
+      "name": "Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        208,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b7bf5aaa-d409-4f3d-8da2-0ef41bfda773",
+      "name": "Executar Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Disparar POST de Reserva": {
+      "main": [
+        [
+          {
+            "node": "Analisar Transação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "Disparar POST de Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Executar Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "177b53bd-9fb1-4f52-869c-4457157829be",
+  "meta": {
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "rUzaikzjZPMuvI630uRd0",
+  "tags": []
+}
