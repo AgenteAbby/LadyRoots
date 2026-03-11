@@ -1,0 +1,57 @@
+O usuário deseja que o arquivo mestre (que recebe e responde diretamente) mantenha sua estrutura visual e funcional originais (tratamento encavalado, webhooks chatwoot, respostas básicas diretas) e APENAS acione os sub-workflows quando o assunto for complexo (Reserva, Financeiro).
+
+Viewed Atendente%20Lady.json:1-800
+
+Carreguei a estrutura do Atendente Lady.json original para refazer o roteador preservando Webhooks e tratamento de filas.
+
+Ran command: `powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $agent = $json.nodes | Where-Object { $_.type -eq '@n8n/n8n-nodes-langchain.agent' }; $agent | ConvertTo-Json -Depth 5"`
+Ran command: `powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $agentIndex = [array]::IndexOf($json.nodes, ($json.nodes | Where-Object { $_.type -eq '@n8n/n8n-nodes-langchain.agent'} | Select-Object -First 1)); Write-Output $agentIndex"`
+
+Eu peguei o index exato do no de agente na matriz do Atendente Lady e substituirei o nó de Agent pelo modelo Switch + Nó LLM que fará as delegações ou respostas básicas.
+
+Ran command: `powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $json.nodes = $json.nodes | Where-Object { $_.type -ne '@n8n/n8n-nodes-langchain.toolWorkflow' }; $json.nodes = $json.nodes | Where-Object { $_.name -ne 'Agent' }; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"`
+Ran command: `powershell -Command "$content = Get-Content 'Atendente Lady Router Novo.json' -Raw; $json = $content | ConvertFrom-Json; $json.nodes += @{ parameters = @{ promptType = 'define'; text = '={{ $json.mensagem }}'; options = @{ systemMessage = 'Você é o Roteador de Atendimento da Pousada Lady Roots. Sua missão é TRIAR as mensagens dos clientes e responder dúvidas BÁSICAS. Se o cliente apenas saudar (oi, bom dia) ou fizer uma pergunta genérica simples e rápida que não seja reserva, responda com cordialidade, carisma e seja extremamente prestativo na própria mensagem usando a persona da Lady Roots. AGORA, SE a intenção da mensagem exigir uso de ferramentas e processos longos, você DEVE retornar APENAS UMA ÚNICA PALAVRA CHAVE para delegar o trabalho: -> RESERVA (Para cotações, datas, preços de quartos, verificar vagas, efetuar compra). -> INFO (Para dúvidas sobre regras, passeios, localização que precisem pesquisar no site). -> FINANCEIRO (Para segunda via, boletos, pix asaas). -> HUMANO (Problemas graves, reclamações onerosas, falar com atendente). Se puder responder na lata, responda como humano. Se precisar desviar, responda APENAS a palavra-chave em maiúsculo.' } }; type = '@n8n/n8n-nodes-langchain.agent'; typeVersion = 1.7; position = @( 112, 1184 ); id = 'router-agent'; name = 'Agent' }; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"`
+Ran command: `powershell -Command "$content = Get-Content 'Atendente Lady Router Novo.json' -Raw; $json = $content | ConvertFrom-Json; $switchNode = @{ parameters = @{ rules = @{ values = @( @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '1'; leftValue = '={{ $json.output }}'; rightValue = 'RESERVA'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'RESERVA' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '2'; leftValue = '={{ $json.output }}'; rightValue = 'INFO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'INFO' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '3'; leftValue = '={{ $json.output }}'; rightValue = 'FINANCEIRO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'FINANCEIRO' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '4'; leftValue = '={{ $json.output }}'; rightValue = 'HUMANO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'HUMANO' } ) }; options = @{ fallbackOutput = 1 } }; type = 'n8n-nodes-base.switch'; typeVersion = 3.2; position = @( 496, 1184 ); id = 'switch-router'; name = 'Switch Roteador Inteligente' }; $json.nodes += $switchNode; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"`
+Restaurando Estrutura Principal do Atendente Lady
+Eu peguei o index exato do no de agente na matriz do Atendente Lady e substituirei o nó de Agent pelo modelo Switch + Nó LLM que fará as delegações ou respostas básicas.
+
+Background Steps
+Running background command
+…\Workflows > powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $agent = $json.nodes | Where-Object { $_.type -eq '@n8n/n8n-nodes-langchain.agent' }; $agent | ConvertTo-Json -Depth 5"
+Microsoft Windows [vers�o 10.0.19045.6466]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+d:\Apps\DEV\Lady Roots_V1\Workflows>
+Running background command
+…\Workflows > powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $agentIndex = [array]::IndexOf($json.nodes, ($json.nodes | Where-Object { $_.type -eq '@n8n/n8n-nodes-langchain.agent'} | Select-Object -First 1)); Write-Output $agentIndex"
+Microsoft Windows [vers�o 10.0.19045.6466]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+d:\Apps\DEV\Lady Roots_V1\Workflows>
+Running background command
+…\Workflows > powershell -Command "$content = Get-Content 'Atendente Lady.json' -Raw; $json = $content | ConvertFrom-Json; $json.nodes = $json.nodes | Where-Object { $_.type -ne '@n8n/n8n-nodes-langchain.toolWorkflow' }; $json.nodes = $json.nodes | Where-Object { $_.name -ne 'Agent' }; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"
+Microsoft Windows [vers�o 10.0.19045.6466]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+d:\Apps\DEV\Lady Roots_V1\Workflows>
+Running background command
+…\Workflows > powershell -Command "$content = Get-Content 'Atendente Lady Router Novo.json' -Raw; $json = $content | ConvertFrom-Json; $json.nodes += @{ parameters = @{ promptType = 'define'; text = '={{ $json.mensagem }}'; options = @{ systemMessage = 'Você é o Roteador de Atendimento da Pousada Lady Roots. Sua missão é TRIAR as mensagens dos clientes e responder dúvidas BÁSICAS. Se o cliente apenas saudar (oi, bom dia) ou fizer uma pergunta genérica simples e rápida que não seja reserva, responda com cordialidade, carisma e seja extremamente prestativo na própria mensagem usando a persona da Lady Roots. AGORA, SE a intenção da mensagem exigir uso de ferramentas e processos longos, você DEVE retornar APENAS UMA ÚNICA PALAVRA CHAVE para delegar o trabalho: -> RESERVA (Para cotações, datas, preços de quartos, verificar vagas, efetuar compra). -> INFO (Para dúvidas sobre regras, passeios, localização que precisem pesquisar no site). -> FINANCEIRO (Para segunda via, boletos, pix asaas). -> HUMANO (Problemas graves, reclamações onerosas, falar com atendente). Se puder responder na lata, responda como humano. Se precisar desviar, responda APENAS a palavra-chave em maiúsculo.' } }; type = '@n8n/n8n-nodes-langchain.agent'; typeVersion = 1.7; position = @( 112, 1184 ); id = 'router-agent'; name = 'Agent' }; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"
+Microsoft Windows [vers�o 10.0.19045.6466]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+d:\Apps\DEV\Lady Roots_V1\Workflows>
+Running background command
+…\Workflows > powershell -Command "$content = Get-Content 'Atendente Lady Router Novo.json' -Raw; $json = $content | ConvertFrom-Json; $switchNode = @{ parameters = @{ rules = @{ values = @( @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '1'; leftValue = '={{ $json.output }}'; rightValue = 'RESERVA'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'RESERVA' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '2'; leftValue = '={{ $json.output }}'; rightValue = 'INFO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'INFO' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '3'; leftValue = '={{ $json.output }}'; rightValue = 'FINANCEIRO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'FINANCEIRO' }, @{ conditions = @{ options = @{ caseSensitive = $true; leftValue = ''; typeValidation = 'strict'; version = 2 }; conditions = @( @{ id = '4'; leftValue = '={{ $json.output }}'; rightValue = 'HUMANO'; operator = @{ type = 'string'; operation = 'contains'; singleValue = $true } } ); combinator = 'and' }; renameOutput = $true; outputKey = 'HUMANO' } ) }; options = @{ fallbackOutput = 1 } }; type = 'n8n-nodes-base.switch'; typeVersion = 3.2; position = @( 496, 1184 ); id = 'switch-router'; name = 'Switch Roteador Inteligente' }; $json.nodes += $switchNode; $json | ConvertTo-Json -Depth 10 | Out-File 'Atendente Lady Router Novo.json' -Encoding utf8"
+Microsoft Windows [vers�o 10.0.19045.6466]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+d:\Apps\DEV\Lady Roots_V1\Workflows>
+Progress Updates
+1
+Analisar o arquivo original Atendente Lady.json e integrá-lo com a lógica de Router sem perder as validações de Chatwoot e fila originais.
+
+2
+Vou utilizar o grep para localizar as definições de Agent e Tools originais que substituirei pelas conexões dos sub-workflows de Router.
+
+3
+Extraindo e reconstruindo o "Atendente Lady.json" original, inserindo a inteligência LLM para desviar chamados e re-enviando pro arquivo principal.
