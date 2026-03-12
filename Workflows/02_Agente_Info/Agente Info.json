@@ -149,7 +149,7 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "IOF6jxVD7LDxa6MD",
           "mode": "id"
         },
         "workflowInputs": {
@@ -169,8 +169,7 @@
       ],
       "id": "tool-site-info",
       "name": "consultar_site",
-      "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de consultar Site ou KB"
+      "notesInFlow": false
     },
     {
       "parameters": {

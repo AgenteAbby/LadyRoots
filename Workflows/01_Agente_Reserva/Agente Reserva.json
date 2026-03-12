@@ -149,7 +149,7 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "nXhQGi4iFi7PCFtkyAVt-",
           "mode": "id"
         },
         "workflowInputs": {
@@ -169,14 +169,13 @@
       ],
       "id": "tool-vagas-reserva",
       "name": "verificar_vagas",
-      "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de Vagas"
+      "notesInFlow": false
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "w7VHHRDY0qUF_YJ70g3iR",
           "mode": "id"
         },
         "workflowInputs": {
@@ -196,14 +195,13 @@
       ],
       "id": "tool-calcular-estadia",
       "name": "calcular_estadia",
-      "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de cálculo"
+      "notesInFlow": false
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "criar_reserva_placeholder",
           "mode": "id"
         },
         "workflowInputs": {
@@ -224,7 +222,7 @@
       "id": "tool-criar-reserva",
       "name": "criar_reserva_hqbeds",
       "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de HQBeds"
+      "notes": "ATENÇÃO: Workflow 'criar_reserva HQBeds.json' não possui ID do n8n no JSON local. Importe-o manualmente e substitua este valor."
     },
     {
       "parameters": {

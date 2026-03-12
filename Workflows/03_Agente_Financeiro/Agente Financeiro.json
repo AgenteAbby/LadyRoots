@@ -149,7 +149,7 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "integracao_asaas_placeholder",
           "mode": "id"
         },
         "workflowInputs": {
@@ -170,13 +170,13 @@
       "id": "tool-asaas",
       "name": "integracao_asaas",
       "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow Integracao Asaas"
+      "notes": "ATENÇÃO: 'Integração Asaas.json' não possui ID do n8n no JSON local. Importe-o manualmente e substitua este valor."
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "f9Wib5-Su1Yi2qWpNWTUk",
           "mode": "id"
         },
         "workflowInputs": {
@@ -196,14 +196,13 @@
       ],
       "id": "tool-gerar-cobranca",
       "name": "gerar_cobranca",
-      "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de Gerar Cobranca"
+      "notesInFlow": false
     },
     {
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "",
+          "value": "RAvzYNb26BqE5sps",
           "mode": "id"
         },
         "workflowInputs": {
@@ -223,8 +222,7 @@
       ],
       "id": "tool-enviar-doc",
       "name": "enviar_documento",
-      "notesInFlow": true,
-      "notes": "TODO: Linkar ID do workflow de Enviar Documento"
+      "notesInFlow": false
     },
     {
       "parameters": {
