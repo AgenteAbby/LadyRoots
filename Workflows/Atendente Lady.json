@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -3056,
-        768
+        -128,
+        1664
       ],
-      "id": "19cd4194-4840-4f11-8772-c1eec1d1a749",
+      "id": "5381514f-1c00-4aec-9116-8b28967e89b1",
       "name": "Mensagem recebida",
       "webhookId": "f6ddc488-8680-4351-84dd-d9e73b2d102d"
     },
@@ -24,10 +24,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1120,
-        784
+        1808,
+        1680
       ],
-      "id": "db8922de-7ad2-4bfc-8eae-4e76479e729c",
+      "id": "a84f9a7f-f01c-4ab4-8a5e-22dd24913722",
       "name": "Mensagem encavalada?"
     },
     {
@@ -64,10 +64,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1344,
-        784
+        1584,
+        1680
       ],
-      "id": "9b78fb9d-d5f8-41f4-bca6-721068cbb66e",
+      "id": "23eb09b0-ee95-4c57-a1b8-30c5b0fe7843",
       "name": "Buscar mensagens",
       "credentials": {
         "postgres": {
@@ -103,10 +103,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -896,
-        784
+        2032,
+        1680
       ],
-      "id": "4d253b44-0c67-4807-ba5b-13c21d7918e9",
+      "id": "0db13aed-11b8-42c6-ae3e-606d35bc4a46",
       "name": "Limpar fila de mensagens",
       "credentials": {
         "postgres": {
@@ -125,10 +125,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2064,
-        592
+        864,
+        1488
       ],
-      "id": "00d5ed27-a851-4d26-9e3c-324ab7b00366",
+      "id": "a36c3a9a-7df3-4b66-b58c-27a9d770fb4d",
       "name": "Sticky Note2"
     },
     {
@@ -138,10 +138,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1552,
-        784
+        1376,
+        1680
       ],
-      "id": "be0b7cbe-ae27-4269-8684-baaf5be023dd",
+      "id": "1f74907b-4f03-43aa-a225-29a9bfd333bc",
       "name": "Esperar",
       "webhookId": "689b51a0-89fe-459d-a560-a59c79797611"
     },
@@ -155,10 +155,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -192,
-        448
+        2736,
+        1344
       ],
-      "id": "f09fdb74-38d5-472a-b6d4-d87416196a7d",
+      "id": "ddd9c194-0b9d-418c-b9e7-e60f072936c5",
       "name": "Sticky Note3"
     },
     {
@@ -171,10 +171,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2032,
-        608
+        4960,
+        1504
       ],
-      "id": "45303104-8ad2-4ed9-b92a-ba5e9fd514dc",
+      "id": "bf7ee6e8-3561-46bc-a680-21241c2a9958",
       "name": "Sticky Note4"
     },
     {
@@ -186,10 +186,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -3136,
-        592
+        -208,
+        1488
       ],
-      "id": "28cc29b2-181e-40e1-a370-edb94b3c159e",
+      "id": "7ee621f8-2cf1-4209-a11d-0af11844fd7a",
       "name": "Sticky Note5"
     },
     {
@@ -253,10 +253,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -2000,
-        800
+        928,
+        1696
       ],
-      "id": "fe206c1f-b119-4e28-879b-1cd545b90ad7",
+      "id": "11f30091-5674-4bbe-baeb-3b49a8bc6098",
       "name": "Tipo de mensagem"
     },
     {
@@ -269,10 +269,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -2064,
-        1168
+        864,
+        2064
       ],
-      "id": "0d69445c-be35-4bab-90ee-5904ffcd02cb",
+      "id": "0df0bd2b-5565-4c97-b7e7-94181aef42c3",
       "name": "Sticky Note6"
     },
     {
@@ -285,10 +285,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -944,
-        592
+        1984,
+        1488
       ],
-      "id": "0cd3ba35-5461-4133-ac9b-a28e8b357617",
+      "id": "121c4209-798c-4fb3-8f43-30c13a3183cd",
       "name": "Sticky Note12"
     },
     {
@@ -301,10 +301,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        832,
-        992
+        3760,
+        1888
       ],
-      "id": "d874ff84-5864-47e3-9ec5-dbc295333fd2",
+      "id": "bc7875f5-6c22-4cc8-892a-49b74028f8f9",
       "name": "Memory",
       "credentials": {
         "postgres": {
@@ -330,10 +330,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -656,
-        784
+        2272,
+        1680
       ],
-      "id": "b5de3767-12cc-46f7-a945-dea410156ddb",
+      "id": "ce6bf0d0-bb95-4fde-a3e3-ff2d0a4f06c8",
       "name": "Marcar como lidas",
       "credentials": {
         "chatwootApi": {
@@ -368,10 +368,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -432,
-        784
+        2496,
+        1680
       ],
-      "id": "b5ee25f9-4b1c-4328-b2bb-951baee7f5d1",
+      "id": "2d0cc2d0-1186-404e-a285-9f527a050dfe",
       "name": "Digitando/Gravando...",
       "credentials": {
         "chatwootApi": {
@@ -403,10 +403,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -128,
-        784
+        2800,
+        1680
       ],
-      "id": "ea8b346b-b07d-4e42-95ff-14644385d001",
+      "id": "f8b2e00b-3c54-4a15-835a-0fdf4475ddca",
       "name": "Set mensagens",
       "executeOnce": true
     },
@@ -420,10 +420,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1936,
-        1312
+        992,
+        2208
       ],
-      "id": "364a50e4-909f-470d-b33c-f81c83d2a4de",
+      "id": "baed0458-e9e3-4c29-ae09-e203a4803199",
       "name": "Download Ã¡udio",
       "credentials": {
         "chatwootApi": {
@@ -440,10 +440,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        -1664,
-        1312
+        1264,
+        2208
       ],
-      "id": "78f15910-04a0-4be4-8cbc-b6769a0e3caa",
+      "id": "cb04c10c-bf54-4024-a194-9ee6e29de996",
       "name": "Extract from File"
     },
     {
@@ -455,10 +455,10 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        -1392,
-        1312
+        1536,
+        2208
       ],
-      "id": "ea4a5c23-31ea-450f-8066-18b8b6a8ddf7",
+      "id": "70c90d1e-4ad3-4715-b571-4417885bab8b",
       "name": "Convert to File"
     },
     {
@@ -487,10 +487,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2144,
-        784
+        5072,
+        1680
       ],
-      "id": "17d35828-21b2-49b0-99c9-d03ac9b9de7d",
+      "id": "5a1aba31-ad93-461e-bf56-aa0cd67814d2",
       "name": "Resetar status",
       "credentials": {
         "chatwootApi": {
@@ -519,10 +519,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2448,
-        784
+        5376,
+        1680
       ],
-      "id": "f0a0df79-20a8-4a8d-b9fb-8cfa73e26581",
+      "id": "4e4aae90-913c-49dd-a7d2-debbe0075b2f",
       "name": "Enviar texto.",
       "credentials": {
         "chatwootApi": {
@@ -608,10 +608,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -2784,
-        768
+        144,
+        1664
       ],
-      "id": "30aad260-b7c2-4167-8503-c196ca35a88a",
+      "id": "412279f6-c29f-41b2-8667-7bda07ff8dfa",
       "name": "Info"
     },
     {
@@ -625,10 +625,10 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        -1152,
-        1312
+        1776,
+        2208
       ],
-      "id": "24854d10-951a-46d9-9423-a753c7dea34a",
+      "id": "cfbe46c4-7bc3-4493-a185-72f623540025",
       "name": "Transcrever audio",
       "credentials": {
         "openAiApi": {
@@ -661,10 +661,10 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        112,
-        784
+        3040,
+        1680
       ],
-      "id": "034f8f81-4e21-475a-8ff0-14d57efe8d1f",
+      "id": "6d6a4a72-f4ab-448f-be14-668971500795",
       "name": "Get a file",
       "webhookId": "8c20f800-28ef-4711-ab25-436ede4684a9",
       "credentials": {
@@ -682,10 +682,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        336,
-        784
+        3264,
+        1680
       ],
-      "id": "6f0da105-188e-4440-9dec-60d8fe6bfedb",
+      "id": "3f99142a-5164-4e6a-b2f4-9722b4d82c14",
       "name": "Extract from File1"
     },
     {
@@ -706,10 +706,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        544,
-        784
+        3472,
+        1680
       ],
-      "id": "d61a44ce-67dc-4eee-96cf-0f06cf8e82e8",
+      "id": "28930f5c-0ac5-466e-b501-330a5d12d7c7",
       "name": "Data & Hora"
     },
     {
@@ -792,10 +792,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1760,
-        784
+        1168,
+        1680
       ],
-      "id": "e8802bfa-6bb0-4984-8843-7197df20adb6",
+      "id": "36f1200e-1976-4ece-a4eb-70cc0ce8c20f",
       "name": "Enfileirar mensagem",
       "credentials": {
         "postgres": {
@@ -811,10 +811,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1776,
-        784
+        4704,
+        1680
       ],
-      "id": "609b9f39-a389-4f7f-9e66-f6b00bdea18a",
+      "id": "1fedcfe0-eee9-4c77-89dd-d016f1ed3e23",
       "name": "Formatar texto"
     },
     {
@@ -856,10 +856,10 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        -2272,
-        800
+        656,
+        1696
       ],
-      "id": "d641b3d1-3eef-4dea-b904-ac33715c0d9d",
+      "id": "b0350e1f-1a74-46a1-807f-e7545359e0ea",
       "name": "Mensagem chegando2?"
     },
     {
@@ -882,10 +882,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1600,
-        48
+        1328,
+        944
       ],
-      "id": "abe046a9-1436-432e-aaec-24b2e37c8097",
+      "id": "8e7aa8bb-dce2-49ae-92c1-cc4cfdb25218",
       "name": "Limpar etiquetas",
       "credentials": {
         "chatwootApi": {
@@ -914,10 +914,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1040,
-        48
+        1888,
+        944
       ],
-      "id": "6cf5960f-1c92-4af8-bcab-3962389791d7",
+      "id": "c55349b1-6d8f-4607-98f8-bd4c47b516d4",
       "name": "Enviar memória resetada",
       "credentials": {
         "chatwootApi": {
@@ -953,10 +953,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1984,
-        48
+        944,
+        944
       ],
-      "id": "9aaa7088-4c0b-4f37-bf12-bb8916defda5",
+      "id": "4b37482d-55b4-4e0e-b4dc-9f32b33568ba",
       "name": "Limpar memória",
       "credentials": {
         "postgres": {
@@ -976,10 +976,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1792,
-        48
+        1136,
+        944
       ],
-      "id": "c794540c-df60-43da-a853-e6ea3139dec5",
+      "id": "7b219e75-429c-41bb-be2c-6c2111fb818a",
       "name": "Resetar atributos",
       "credentials": {
         "chatwootApi": {
@@ -1015,10 +1015,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1216,
-        48
+        1712,
+        944
       ],
-      "id": "2dd0cfcc-9fa3-4b15-b4d4-b21ebd80ad67",
+      "id": "93cb2803-c0db-401e-9ed3-90b3d1a2f38b",
       "name": "Limpar fila de mensagens1",
       "credentials": {
         "postgres": {
@@ -1036,11 +1036,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2064,
-        -48
+        864,
+        848
       ],
       "typeVersion": 1,
-      "id": "cc9e16fa-d95e-435f-a113-200093d14656",
+      "id": "89bb930e-9505-4ab9-a27e-10294610c7e5",
       "name": "Sticky Note",
       "disabled": true
     },
@@ -1107,10 +1107,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        -2528,
-        752
+        400,
+        1648
       ],
-      "id": "0b769504-a6ee-45d2-9b88-013c9b4cd4d4",
+      "id": "478b73e7-61c8-413d-9e70-7c2d3a114ecd",
       "name": "Reset ou teste"
     },
     {
@@ -1133,10 +1133,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1984,
-        384
+        944,
+        1280
       ],
-      "id": "fa378c78-f41c-4eeb-8134-07feb0477eda",
+      "id": "f8c958a9-5681-43f8-96dc-f61546255d38",
       "name": "Colocar etiqueta testando-agente",
       "credentials": {
         "chatwootApi": {
@@ -1165,10 +1165,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1776,
-        384
+        1152,
+        1280
       ],
-      "id": "302f72b5-65a3-4dbe-9546-115529aba915",
+      "id": "8ec40a2d-5fce-416e-84b4-ce74ff55bf22",
       "name": "Enviar teste habilitado",
       "credentials": {
         "chatwootApi": {
@@ -1186,11 +1186,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2064,
-        272
+        864,
+        1168
       ],
       "typeVersion": 1,
-      "id": "e1d3ca62-2f7c-4248-87eb-11c4b95dd5f5",
+      "id": "a6226bba-ad70-4af8-a9ad-a792680ed3c1",
       "name": "Sticky Note7",
       "disabled": true
     },
@@ -1256,10 +1256,10 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1408,
-        48
+        1520,
+        944
       ],
-      "id": "648f9e95-2898-4b5d-a5be-d6480152d2a7",
+      "id": "d9480061-cc4b-4358-bfd1-72c13e69f630",
       "name": "Resetar status atendimento",
       "credentials": {
         "postgres": {
@@ -1287,10 +1287,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        736,
-        992
+        3664,
+        1888
       ],
-      "id": "4b247e4f-1d04-4809-85ca-fecfda4f1679",
+      "id": "ee610b51-f76a-4dc3-aa1a-f0a61e20461d",
       "name": "OpenAI",
       "credentials": {
         "openAiApi": {
@@ -1312,10 +1312,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.1,
       "position": [
-        1376,
-        512
+        4304,
+        1408
       ],
-      "id": "cd590a62-e8fa-48b0-8095-e716e4dee5cf",
+      "id": "2f9925ea-0014-4225-9fa9-ad05463659e5",
       "name": "Chama Agente Reserva"
     },
     {
@@ -1331,10 +1331,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.1,
       "position": [
-        1376,
-        672
+        4304,
+        1568
       ],
-      "id": "c4eb5c81-5640-4572-9383-0e119c6a0d5a",
+      "id": "204f5fb5-ee5a-44b9-8c06-5792ec7d1c04",
       "name": "Chama Agente Info"
     },
     {
@@ -1350,10 +1350,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.1,
       "position": [
-        1376,
-        880
+        4304,
+        1776
       ],
-      "id": "8ec46ab4-54ca-4b83-ab86-8432650ba479",
+      "id": "f7690d1c-c6de-4f76-ada7-bef6335d6e42",
       "name": "Chama Agente Financeiro"
     },
     {
@@ -1369,10 +1369,10 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.1,
       "position": [
-        1376,
-        1072
+        4304,
+        1968
       ],
-      "id": "8c4b89ae-418d-45ae-a10b-4f0ceb9adb4d",
+      "id": "cab46a53-9af8-4c5f-924a-f94265cfba50",
       "name": "Chama Agente Humano"
     },
     {
@@ -1386,10 +1386,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        736,
-        784
+        3664,
+        1680
       ],
-      "id": "e80d3f2f-4b32-43c3-b96b-9b7d6a7d3f0d",
+      "id": "8d578c06-c788-4363-aa37-210e194259e3",
       "name": "Atendente"
     },
     {
@@ -1558,10 +1558,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1040,
-        736
+        3968,
+        1632
       ],
-      "id": "d3f6e1de-79f0-4702-8ed0-fc9daf0cc1d1",
+      "id": "f22ecffd-ccea-4f75-af48-af34586f6165",
       "name": "Switch Especialista"
     }
   ],
@@ -2018,7 +2018,7 @@
     "executionOrder": "v1",
     "availableInMCP": true
   },
-  "versionId": "9e02ac3c-328b-4662-a00e-a483bf768f9a",
+  "versionId": "1314c5de-e8d6-4aec-9716-6555017399b1",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
