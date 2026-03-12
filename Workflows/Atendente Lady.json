@@ -1303,14 +1303,34 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "7ID25Vo2pgOUezP4",
-          "mode": "id",
-          "cachedResultUrl": "/workflow/7ID25Vo2pgOUezP4"
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Agente Reserva"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "mensagem": "={{ $json.output }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {"id": "mensagem", "displayName": "mensagem", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "telefone", "displayName": "telefone", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conta", "displayName": "id_conta", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conversa", "displayName": "id_conversa", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "url_chatwoot", "displayName": "url_chatwoot", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"}
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
       "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.1,
+      "typeVersion": 1.2,
       "position": [
         4304,
         1408
@@ -1322,14 +1342,34 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "rYW4gtiKIPrW-8dy203VQ",
-          "mode": "id",
-          "cachedResultUrl": "/workflow/rYW4gtiKIPrW-8dy203VQ"
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Agente Info"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "mensagem": "={{ $json.output }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {"id": "mensagem", "displayName": "mensagem", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "telefone", "displayName": "telefone", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conta", "displayName": "id_conta", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conversa", "displayName": "id_conversa", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "url_chatwoot", "displayName": "url_chatwoot", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"}
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
       "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.1,
+      "typeVersion": 1.2,
       "position": [
         4304,
         1568
@@ -1341,14 +1381,34 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "sAliw8QhKCrUfOswCtDNZ",
-          "mode": "id",
-          "cachedResultUrl": "/workflow/sAliw8QhKCrUfOswCtDNZ"
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Agente Financeiro"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "mensagem": "={{ $json.output }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {"id": "mensagem", "displayName": "mensagem", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "telefone", "displayName": "telefone", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conta", "displayName": "id_conta", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conversa", "displayName": "id_conversa", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "url_chatwoot", "displayName": "url_chatwoot", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"}
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
       "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.1,
+      "typeVersion": 1.2,
       "position": [
         4304,
         1776
@@ -1360,14 +1420,34 @@
       "parameters": {
         "workflowId": {
           "__rl": true,
-          "value": "lO_h6T7_qnhimor1mPSSv",
-          "mode": "id",
-          "cachedResultUrl": "/workflow/lO_h6T7_qnhimor1mPSSv"
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Notificar Equipe"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "mensagem": "={{ $json.output }}",
+            "telefone": "={{ $('Info').item.json.telefone }}",
+            "id_conta": "={{ $('Info').item.json.id_conta }}",
+            "id_conversa": "={{ $('Info').item.json.id_conversa }}",
+            "url_chatwoot": "={{ $('Info').item.json.url_chatwoot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {"id": "mensagem", "displayName": "mensagem", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "telefone", "displayName": "telefone", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conta", "displayName": "id_conta", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "id_conversa", "displayName": "id_conversa", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"},
+            {"id": "url_chatwoot", "displayName": "url_chatwoot", "required": false, "defaultMatch": false, "display": true, "canBeUsedToMatch": true, "type": "string"}
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
         },
         "options": {}
       },
       "type": "n8n-nodes-base.executeWorkflow",
-      "typeVersion": 1.1,
+      "typeVersion": 1.2,
       "position": [
         4304,
         1968
