@@ -1,0 +1,478 @@
+{
+  "name": "00 - Router Atendente Lady",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f6ddc488-8680-4351-84dd-d9e73b2d102d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -3840,
+        1152
+      ],
+      "id": "a76cbc89-c107-4c64-b9d5-d0a395aee5b4",
+      "name": "Mensagem recebida"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8bf522a6-75fb-434a-854c-b736539309e1",
+              "name": "telefone",
+              "value": "={{ $json.body.sender.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "0d622a33-f313-4758-a764-fa6cbf2b0587",
+              "name": "mensagem",
+              "value": "={{ $json.body.content || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "8f4b9d84-56e0-4f45-9f17-68c53f365f43",
+              "name": "mensagem_de_audio",
+              "value": "={{ $json.body.attachments?.[0]?.meta?.is_recorded_audio || false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "1b513343-9b6a-4f6e-a012-ed819bf34a31",
+              "name": "id_conta",
+              "value": "={{ $json.body.account.id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c14b9a-5f27-465a-a047-71553826bd7a",
+              "name": "id_conversa",
+              "value": "={{ $json.body.conversation.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3568,
+        1152
+      ],
+      "id": "9512c37e-8819-49a9-8305-fb26ac3013e2",
+      "name": "Parse Info Entrada"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.mensagem }}",
+        "options": {
+          "systemMessage": "# PROMPT OPERACIONAL MASTER: LADY (ATENDENTE PRINCIPAL E ROTEADORA)\\n\\n## 1. IDENTIDADE E TRATAMENTO\\nVocê é **Lady**, a anfitriã e especialista comercial da pousada Lady Roots Ilha Grande. Você é a primeira pessoa com quem o cliente fala (a linha de frente).\\n- **Humanidade:** Você é uma pessoa real. Nunca admita ser IA, robô ou automação.\\n- **Estilo:** Beachy-Chic. Cordial, direta e segura. Respostas curtas (2 a 5 linhas). Proibido usar textos longos.\\n- **Identificação de Contexto:** Se ele mencionar o motivo da viagem (férias, aniversário, etc.), integre de forma acolhedora à resposta.\\n\\n## 2. REGRAS DE OURO DA ATENDENTE (SAUDAÇÕES E DÚVIDAS SIMPLES)\\nSua missão principal é recepcionar o cliente, apresentar o menu de opções, e responder **apenas perguntas simples** listadas abaixo. Qualquer outra intenção de negócio mais profunda deve ser ROTEADA.\\nSe a mensagem for uma **saudação** (\\\"Oi\\\", \\\"Bom dia\\\", \\\"Tudo bem?\\\") ou um **agradecimento** (\\\"Obrigado\\\", \\\"Valeu\\\"), aja de forma conversacional e acolhedora.\\n\\n### 2.1 BOAS-VINDAS E TRIAGEM (MENU)\\nSe for o primeiro contato (quando o cliente disser apenas \\\"Oi\\\" ou pedir informações gerais sem especificar), envie o seguinte menu OBRIGATORIAMENTE em lista NUMERADA, com quebra de linha entre cada item:\\n\\n\\\"Olá! Seja bem-vindo(a) à Lady Roots Ilha Grande! Como posso ajudar hoje? Escolha uma opção:\\n\\n1 - Hospedagem e Vagas\\n2 - Passeios / Pacote Promocional\\n3 - Transfer (Passagens)\\n4 - Restaurante\\n5 - Financeiro\\n6 - Outros\\\"\\n\\n**Trava de Loop:** Se o histórico mostrar que o Menu Inicial já foi enviado ou se o cliente já escolheu uma opção (texto ou número), NÃO repita o menu.\\n\\n### 2.2 RESPOSTAS SIMPLES PERMITIDAS\\nVocê possui permissão e conhecimento para responder *exclusivamente* aos seguintes itens, sem precisar rotear:\\n\\n**A. VALORES DE PASSAGENS (TRANSFER)**\\n- Valor médio do transfer: **R$ 190 a R$ 210**.\\n- Confirmação de horários/locais/vagas: apenas pelo atendimento humano. Se quiser agendar → rotear para HUMANO.\\n\\n**B. GASTRONOMIA E RESTAURANTE**\\n- Cardápio e funcionamento: https://ladyrootsilhagrande.com.br/restaurantes/\\n\\n**C. PACOTE PROMOCIONAL ATIVO**\\n- **Valor:** 3 parcelas de R$ 269 por pessoa.\\n- **Incluso:** 3 diárias + 1 passeio de lancha + 1 almoço. Até 4 pessoas por suíte.\\n- Para fechar/reservar: rotear para RESERVA.\\n\\n**D. AMBIGUIDADE \\\"AVENTUREIRO\\\"**\\n- Temos SUÍTE e PASSEIO com esse nome. Se mencionar \\\"aventura\\\" sem especificar, pergunte qual deseja.\\n\\n## 3. ROTEAMENTO PARA AGENTES ESPECIALISTAS (CRÍTICO)\\nSe o pedido envolver uma **Intenção de Negócio**, VOCÊ NÃO PODE MAIS BATER PAPO. Atue como um ROTEADOR DE TRÂNSITO. O ÚNICO TEXTO QUE VOCÊ DEVE DEVOLVER É **APENAS A PALAVRA-CHAVE** correspondente. NADA MAIS. Sem \\\"Olá\\\", sem \\\"Vou verificar\\\", sem \\\"Um instante\\\". SÓ A PALAVRA.\\n\\n**Palavras-Chave de Encaminhamento:**\\n- **RESERVA**: Se o cliente mencionar qualquer data, quiser verificar vagas, fazer orçamento ou reservar suíte/lancha/pacote.\\n- **INFO**: Se o cliente quiser ver fotos do local ou detalhes específicos das suítes.\\n- **FINANCEIRO**: Se o cliente quiser código pix, pagar reserva, boleto, segunda via ou verificar pagamento.\\n- **HUMANO**: Se o cliente pedir atendente humano, tiver reclamação, problema na estadia atual, ou quiser agendar transfer.\\n\\n## 4. FORMATO DE RESPOSTA\\n- **Tamanho:** Entre 2 a 5 linhas.\\n- **Estilo:** Direto, acolhedor e seguro.\\n- **Condução:** Nunca encerre sem gerar próximo passo ou pergunta, exceto ao devolver palavra-chave de roteamento.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -3200,
+        1152
+      ],
+      "id": "router-agent",
+      "name": "Router AI"
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -3200,
+        1352
+      ],
+      "id": "llm-router"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "RESERVA",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "RESERVA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "INFO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "INFO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "FINANCEIRO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "FINANCEIRO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "HUMANO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "HUMANO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": 1
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -2800,
+        1152
+      ],
+      "id": "switch-router",
+      "name": "Switch Especialista"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Parse Info Entrada').item.json.telefone }}",
+            "mensagem": "={{ $('Parse Info Entrada').item.json.mensagem }}"
+          },
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        -2400,
+        900
+      ],
+      "id": "exe-reserva",
+      "name": "Chama Agente Reserva"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Parse Info Entrada').item.json.telefone }}",
+            "mensagem": "={{ $('Parse Info Entrada').item.json.mensagem }}"
+          },
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        -2400,
+        1100
+      ],
+      "id": "exe-info",
+      "name": "Chama Agente Info"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Parse Info Entrada').item.json.telefone }}",
+            "mensagem": "={{ $('Parse Info Entrada').item.json.mensagem }}"
+          },
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        -2400,
+        1300
+      ],
+      "id": "exe-financeiro",
+      "name": "Chama Agente Financeiro"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Parse Info Entrada').item.json.telefone }}",
+            "mensagem": "={{ $('Parse Info Entrada').item.json.mensagem }}"
+          },
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.1,
+      "position": [
+        -2400,
+        1500
+      ],
+      "id": "exe-humano",
+      "name": "Chama Agente Humano"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Parse Info Entrada').item.json.url_chatwoot || 'https://chatwoot.abbyai.run' }}/api/v1/accounts/{{ $('Parse Info Entrada').item.json.id_conta }}/conversations/{{ $('Parse Info Entrada').item.json.id_conversa }}/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "chatwootApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $json.respostaAgente }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1800,
+        1152
+      ],
+      "id": "send-msg",
+      "name": "Responder via Chatwoot"
+    }
+  ],
+  "connections": {
+    "Mensagem recebida": {
+      "main": [
+        [
+          {
+            "node": "Parse Info Entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Info Entrada": {
+      "main": [
+        [
+          {
+            "node": "Router AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "llm-router": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Router AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router AI": {
+      "main": [
+        [
+          {
+            "node": "Switch Especialista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Especialista": {
+      "main": [
+        [
+          {
+            "node": "Chama Agente Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chama Agente Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chama Agente Financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Chama Agente Humano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chama Agente Reserva": {
+      "main": [
+        [
+          {
+            "node": "Responder via Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chama Agente Info": {
+      "main": [
+        [
+          {
+            "node": "Responder via Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chama Agente Financeiro": {
+      "main": [
+        [
+          {
+            "node": "Responder via Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chama Agente Humano": {
+      "main": [
+        [
+          {
+            "node": "Responder via Chatwoot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
