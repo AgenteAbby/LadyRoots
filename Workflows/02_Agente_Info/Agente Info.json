@@ -9,23 +9,99 @@
         0,
         0
       ],
-      "id": "trigger-info"
+      "id": "trigger-info",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "AgenteAbby",
+          "mode": "list",
+          "cachedResultName": "AgenteAbby",
+          "cachedResultUrl": "https://github.com/AgenteAbby"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "LadyRoots",
+          "mode": "list",
+          "cachedResultName": "LadyRoots",
+          "cachedResultUrl": "https://github.com/AgenteAbby/LadyRoots"
+        },
+        "filePath": "Prompt_Agente_Info.md",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        0
+      ],
+      "id": "github-info",
+      "name": "Get a file",
+      "credentials": {
+        "githubApi": {
+          "id": "68dRPQIO6Hk0P7wD",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "extract-info",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "377d9293-info-4623-a44e-9b318968b2e4",
+              "name": "data_hoje",
+              "value": "={{$now.setZone('America/Sao_Paulo').toFormat(\"dd/MM/yyyy HH:mm:ss\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        600,
+        0
+      ],
+      "id": "data-hora-info",
+      "name": "Data & Hora"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.mensagem }}",
+        "text": "={{ $('Execute Workflow Trigger').item.json.mensagem }}",
         "options": {
-          "systemMessage": "Você é o especialista em Informações e Dúvidas Frequentes da Pousada Lady Roots. Sua missão é responder cordial e rapidamente sobre regras da casa, localização, passeios, café da manhã e políticas utilizando o site ou a base de conhecimento (rag)."
+          "systemMessage": "={{ $json.data || $json.text }}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        220,
+        820,
         0
       ],
-      "id": "agent-info"
+      "id": "agent-info",
+      "name": "Agente Info"
     },
     {
       "parameters": {
@@ -35,10 +111,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        220,
+        820,
         220
       ],
       "id": "llm-info",
+      "name": "OpenAI",
       "credentials": {
         "openAiApi": {
           "id": "Ll562DreZPSEn57a",
@@ -56,10 +133,11 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        360,
+        960,
         220
       ],
       "id": "memory-info",
+      "name": "Memory",
       "credentials": {
         "postgres": {
           "id": "IbTQCUZTjDnHg7GK",
@@ -86,7 +164,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        500,
+        1100,
         220
       ],
       "id": "tool-site-info",
@@ -109,7 +187,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        600,
+        1200,
         0
       ],
       "id": "set-info-output",
@@ -121,18 +199,51 @@
       "main": [
         [
           {
-            "node": "Agent",
+            "node": "Get a file",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ChatWoot account Chat GPT 4o": {
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Data & Hora",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data & Hora": {
+      "main": [
+        [
+          {
+            "node": "Agente Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
       "ai_languageModel": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Info",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -143,7 +254,7 @@
       "ai_memory": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Info",
             "type": "ai_memory",
             "index": 0
           }
@@ -154,14 +265,14 @@
       "ai_tool": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Info",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Agent": {
+    "Agente Info": {
       "main": [
         [
           {

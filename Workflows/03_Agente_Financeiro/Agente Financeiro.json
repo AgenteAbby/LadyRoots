@@ -9,23 +9,99 @@
         0,
         0
       ],
-      "id": "trigger-financeiro"
+      "id": "trigger-financeiro",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "AgenteAbby",
+          "mode": "list",
+          "cachedResultName": "AgenteAbby",
+          "cachedResultUrl": "https://github.com/AgenteAbby"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "LadyRoots",
+          "mode": "list",
+          "cachedResultName": "LadyRoots",
+          "cachedResultUrl": "https://github.com/AgenteAbby/LadyRoots"
+        },
+        "filePath": "Prompt_Agente_Financeiro.md",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        0
+      ],
+      "id": "github-financeiro",
+      "name": "Get a file",
+      "credentials": {
+        "githubApi": {
+          "id": "68dRPQIO6Hk0P7wD",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "extract-financeiro",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "377d9293-finan-4623-a44e-9b318968b2e4",
+              "name": "data_hoje",
+              "value": "={{$now.setZone('America/Sao_Paulo').toFormat(\"dd/MM/yyyy HH:mm:ss\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        600,
+        0
+      ],
+      "id": "data-hora-financeiro",
+      "name": "Data & Hora"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.mensagem }}",
+        "text": "={{ $('Execute Workflow Trigger').item.json.mensagem }}",
         "options": {
-          "systemMessage": "Você é o especialista Financeiro da Pousada Lady Roots.\nVocê ajuda a gerar faturas, boletos (Asaas) e enviar documentos.\nSeja sempre pontual e confirme os dados antes de gerar cobranças."
+          "systemMessage": "={{ $json.data || $json.text }}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        220,
+        820,
         0
       ],
-      "id": "agent-financeiro"
+      "id": "agent-financeiro",
+      "name": "Agente Financeiro"
     },
     {
       "parameters": {
@@ -35,10 +111,11 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        220,
+        820,
         220
       ],
       "id": "llm-financeiro",
+      "name": "OpenAI",
       "credentials": {
         "openAiApi": {
           "id": "Ll562DreZPSEn57a",
@@ -56,10 +133,11 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        360,
+        960,
         220
       ],
       "id": "memory-financeiro",
+      "name": "Memory",
       "credentials": {
         "postgres": {
           "id": "IbTQCUZTjDnHg7GK",
@@ -86,7 +164,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        500,
+        1100,
         220
       ],
       "id": "tool-asaas",
@@ -95,58 +173,58 @@
       "notes": "TODO: Linkar ID do workflow Integracao Asaas"
     },
     {
-        "parameters": {
-          "workflowId": {
-            "__rl": true,
-            "value": "",
-            "mode": "id"
-          },
-          "workflowInputs": {
-            "mappingMode": "defineBelow",
-            "value": {},
-            "matchingColumns": [],
-            "schema": [],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          }
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
         },
-        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-        "typeVersion": 2.2,
-        "position": [
-          660,
-          220
-        ],
-        "id": "tool-gerar-cobranca",
-        "name": "gerar_cobranca",
-        "notesInFlow": true,
-        "notes": "TODO: Linkar ID do workflow de Gerar Cobranca"
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1260,
+        220
+      ],
+      "id": "tool-gerar-cobranca",
+      "name": "gerar_cobranca",
+      "notesInFlow": true,
+      "notes": "TODO: Linkar ID do workflow de Gerar Cobranca"
     },
     {
-        "parameters": {
-          "workflowId": {
-            "__rl": true,
-            "value": "",
-            "mode": "id"
-          },
-          "workflowInputs": {
-            "mappingMode": "defineBelow",
-            "value": {},
-            "matchingColumns": [],
-            "schema": [],
-            "attemptToConvertTypes": false,
-            "convertFieldsToString": false
-          }
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
         },
-        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-        "typeVersion": 2.2,
-        "position": [
-          820,
-          220
-        ],
-        "id": "tool-enviar-doc",
-        "name": "enviar_documento",
-        "notesInFlow": true,
-        "notes": "TODO: Linkar ID do workflow de Enviar Documento"
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1420,
+        220
+      ],
+      "id": "tool-enviar-doc",
+      "name": "enviar_documento",
+      "notesInFlow": true,
+      "notes": "TODO: Linkar ID do workflow de Enviar Documento"
     },
     {
       "parameters": {
@@ -163,7 +241,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        600,
+        1200,
         0
       ],
       "id": "set-financeiro-output",
@@ -175,18 +253,51 @@
       "main": [
         [
           {
-            "node": "Agent",
+            "node": "Get a file",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "ChatWoot account Chat GPT 4o": {
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Data & Hora",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data & Hora": {
+      "main": [
+        [
+          {
+            "node": "Agente Financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
       "ai_languageModel": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Financeiro",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -197,7 +308,7 @@
       "ai_memory": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Financeiro",
             "type": "ai_memory",
             "index": 0
           }
@@ -208,7 +319,7 @@
       "ai_tool": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Financeiro",
             "type": "ai_tool",
             "index": 0
           }
@@ -219,7 +330,7 @@
       "ai_tool": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Financeiro",
             "type": "ai_tool",
             "index": 0
           }
@@ -230,14 +341,14 @@
       "ai_tool": [
         [
           {
-            "node": "Agent",
+            "node": "Agente Financeiro",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Agent": {
+    "Agente Financeiro": {
       "main": [
         [
           {
