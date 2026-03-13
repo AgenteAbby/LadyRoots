@@ -1,0 +1,506 @@
+{
+  "name": "Agente Reserva",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# PROMPT OPERACIONAL: AGENTE DE RESERVAS E VENDAS\n\n## 1. IDENTIDADE E TRATAMENTO\nVocê é **Lady**, a anfitriã e especialista comercial da Lady Roots Ilha Grande.\n- **Humanidade:** Você é uma pessoa real. Nunca admita ser IA, robô ou automação.\n- **Personalização (Obrigatório):** Chame o cliente pelo nome. Nunca use termos robóticos ou repita exaustivamente.\n- **Estilo:** Direta, segura e acolhedora. Respostas curtas (2 a 5 linhas). Proibido textos longos.\n\n## 2. REGRA MÁXIMA DO SISTEMA (LEIA ANTES DE QUALQUER COISA)\n**PROIBIDO RESPONDER AO CLIENTE ANTES DE A FERRAMENTA RETORNAR DADOS!**\nSempre que você chamar uma ferramenta (verificar_vagas, calcular_estadia, criar_reserva_hqbeds), você DEVE aguardar o resultado retornar para ENTÃO escrever a resposta para o cliente. Nunca produza uma resposta intermediária antes da ferramenta terminar. Só responda DEPOIS de ler o output da ferramenta.\n\n## 2.1 DADOS SENSÍVEIS - PROIBIDO EXIBIR AO CLIENTE\nÉ TOTALMENTE PROIBIDO mencionar, exibir ou incluir na resposta ao cliente qualquer um dos seguintes dados:\n- `id_quarto` (ex: 11154, 11091, 11155)\n- `token_serializado` (qualquer string começando com `a:1:{` ou similar)\n- Qualquer dado de serialização PHP ou interna do sistema\nEsses dados são uso interno do sistema. Guarde-os silenciosamente para usar ao chamar `criar_reserva_hqbeds`. O cliente nunca deve vê-los.\n\n## 3. FERRAMENTAS E CÁLCULOS TÉCNICOS (CRÍTICO)\n\n**3.1 Verificar Vagas (`verificar_vagas`)**\n- **Uso:** Acionar silenciosamente quando o cliente pedir para alugar quartos, vagas, estadias E JÁ TIVER DADO AS DATAS.\n- **Parâmetros:** `acao: \"consultar\"`, `data_inicio` (DD/MM/YYYY), `data_fim` (DD/MM/YYYY), `suite` (opcional).\n- **FUNDAMENTAL:** Nunca responda ao cliente ANTES de ter o resultado da ferramenta nas mãos. Aguarde o retorno e baseie sua resposta nele.\n- **Proibido:** Nunca envie mensagens de \"um momento, vou verificar\". Apenas acione em silêncio e depois responda com os dados.\n\n**3.2 Consulta de Orçamentos (`calcular_estadia`)**\n- **Uso:** Antes de passar qualquer valor, execute a ferramenta! PROIBIDO CALCULAR DE CABEÇA.\n- **Parâmetros:** `mes`, `tipo_calculo`, `dias_fds`, `dias_semana`, `adultos`, `idades_criancas` (String separada por vírgula, ex: \"5,10\"), `prime_gourmet` (boolean).\n\n**3.3 Criar Reserva Oficial (`criar_reserva_hqbeds`)**\n- **Uso Crítico:** Apenas para efetivar o agendamento real e bloquear o quarto.\n- **Parâmetros Obrigatórios:** `data_inicio`, `data_fim`, `nome_cliente`, `telefone_cliente`, `id_quarto`, `token_serializado`, `valor_total`.\n\n## 4. PASSO A PASSO DA VENDA:\n\n**PASSO 1: DATAS E VAGAS (PRIORIDADE ZERO)**\nSe o cliente quiser hospedagem e JÁ TIVER INFORMADO as datas, acione `verificar_vagas` imediatamente.\nSe NÃO tiver as datas, pergunte: *\"Quais seriam os dias exatos de entrada e saída?\"*.\nAguarde o resultado da ferramenta ANTES de escrever qualquer palavra ao cliente.\n\n**PASSO 2: APRESENTAÇÃO DAS VAGAS**\nAo exibir as opções de suítes para o cliente, mostre APENAS: Nome da suíte, descrição curta e disponibilidade. NUNCA liste IDs, tokens ou dados internos.\nExemplo correto: \"Temos disponível a Suíte Lagoa Azul e a Suíte Loft para essas datas. Qual delas te interessa?\"\n\n**PASSO 3: AMBIGUIDADE**\nTemos lancha/passeio Aventureiro e a Suíte Aventureiro. Se ele disser só \"Aventureiro\", pergunte o que busca. Se já disser \"suíte\" ou \"quarto\", prossiga.\n\n**PASSO 4: CROSS-SELL OBRIGATÓRIO (PASSEIOS)**\nApós confirmar hospedagem, ofereça sempre um passeio.\n\n## 5. FECHAMENTO DE VENDA\nApós calcular o valor, finalize com: \"Pronto, deseja que eu gere o Link de Pagamento no valor de X?\" Se sim, o agente financeiro cuidará do resto.\n",
+        "options": {
+          "systemMessage": "={{ $json.data || $json.text }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2096,
+        608
+      ],
+      "id": "9e3ac976-091b-4d35-bafd-4724ff3a48df",
+      "name": "Agente Reserva"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2096,
+        832
+      ],
+      "id": "5d4dbdc2-1857-4cdd-b3d9-c42a8d583694",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ll562DreZPSEn57a",
+          "name": "OpenAi account NaveRealengo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When Executed by Another Workflow').first().json.telefone }}",
+        "tableName": "n8n_historico_mensagens",
+        "contextWindowLength": 150
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        2192,
+        832
+      ],
+      "id": "c4ab0e3d-3120-4ee3-beb4-7805608ab063",
+      "name": "Memory",
+      "credentials": {
+        "postgres": {
+          "id": "IbTQCUZTjDnHg7GK",
+          "name": "Postgres Lady_Roots_V1"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "nXhQGi4iFi7PCFtkyAVt-",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "acao": "={{$fromAI('acao', 'Sempre envie a palavra: consultar', 'string')}}",
+            "data_inicio": "={{$fromAI('data_inicio', 'Data do check-in (entrada). Formato exato DD/MM/YYYY.', 'string')}}",
+            "data_fim": "={{$fromAI('data_fim', 'Data do check-out (saída). Formato exato DD/MM/YYYY. (Deve ser posterior ao data_inicio)', 'string')}}",
+            "suite": "={{$fromAI('suite', 'Deixe vazio se o cliente não escolher suíte. Opcional: nome da suíte alvo', 'string')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "acao",
+              "displayName": "acao",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_inicio",
+              "displayName": "data_inicio",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_fim",
+              "displayName": "data_fim",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "suite",
+              "displayName": "suite",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2368,
+        832
+      ],
+      "id": "59e6ca76-c79a-4d65-bf42-0539a2920cb4",
+      "name": "verificar_vagas",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "w7VHHRDY0qUF_YJ70g3iR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tipo_calculo": "={{$fromAI('tipo_calculo', 'Deve ser hospedagem ou passeio', 'string')}}",
+            "mes": "={{$fromAI('mes', 'Mês da estadia', 'string')}}",
+            "dias_fds": "={{$fromAI('dias_fds', 'Dias no fim de semana', 'number')}}",
+            "dias_semana": "={{$fromAI('dias_semana', 'Dias na semana', 'number')}}",
+            "adultos": "={{$fromAI('adultos', 'Quantidade de adultos', 'number')}}",
+            "idades_criancas": "={{$fromAI('idades_criancas', 'Idades das crianças, se houver (ex: 5,10)', 'string')}}",
+            "prime_gourmet": "={{$fromAI('prime_gourmet', 'True se cliente disse ter Prime Gourmet', 'boolean')}}",
+            "passeio_alvo": "={{$fromAI('passeio_alvo', 'Nome do passeio alvo (só para passeios)', 'string')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "tipo_calculo",
+              "displayName": "tipo_calculo",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mes",
+              "displayName": "mes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dias_fds",
+              "displayName": "dias_fds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dias_semana",
+              "displayName": "dias_semana",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "adultos",
+              "displayName": "adultos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "idades_criancas",
+              "displayName": "idades_criancas",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "prime_gourmet",
+              "displayName": "prime_gourmet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "passeio_alvo",
+              "displayName": "passeio_alvo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2512,
+        832
+      ],
+      "id": "2c3456c3-8efa-438e-8f85-0bfdb62ff209",
+      "name": "calcular_estadia",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "criar_reserva_placeholder",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data_inicio": "={{$fromAI('data_inicio', 'Data de checkin DD/MM/YYYY', 'string')}}",
+            "data_fim": "={{$fromAI('data_fim', 'Data de checkout DD/MM/YYYY', 'string')}}",
+            "nome_cliente": "={{$fromAI('nome_cliente', 'Nome do cliente completo', 'string')}}",
+            "telefone_cliente": "={{$fromAI('telefone_cliente', 'Telefone do cliente com DDI e DDD', 'string')}}",
+            "id_quarto": "={{$fromAI('id_quarto', 'ID numérico do quarto escolhido', 'string')}}",
+            "token_serializado": "={{$fromAI('token_serializado', 'Token devolvido pela pesquisa de vagas', 'string')}}",
+            "valor_total": "={{$fromAI('valor_total', 'Valor total a ser cobrado', 'number')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "data_inicio",
+              "displayName": "data_inicio",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data_fim",
+              "displayName": "data_fim",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nome_cliente",
+              "displayName": "nome_cliente",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefone_cliente",
+              "displayName": "telefone_cliente",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "id_quarto",
+              "displayName": "id_quarto",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "token_serializado",
+              "displayName": "token_serializado",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "valor_total",
+              "displayName": "valor_total",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2672,
+        832
+      ],
+      "id": "ddb8a789-058e-4eeb-a331-2c925295389b",
+      "name": "criar_reserva_hqbeds",
+      "notesInFlow": true,
+      "notes": "ATENÇÃO: Workflow 'criar_reserva HQBeds.json' não possui ID do n8n no JSON local. Importe-o manualmente e substitua este valor."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "formatar-retorno-output",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2464,
+        608
+      ],
+      "id": "91d0ac1f-7053-477f-afe5-03c8b1e52ad0",
+      "name": "Formatar Retorno"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            { "name": "mensagem" },
+            { "name": "telefone" },
+            { "name": "nome" },
+            { "name": "id_conta" },
+            { "name": "id_conversa" },
+            { "name": "url_chatwoot" }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        608
+      ],
+      "id": "5d06afa7-5d03-4978-87d4-b777d83dffb3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "description": "Use a ferramenta para refletir sobre algo antes de responder. Ela não obterá novas informações nem alterará o banco de dados, apenas adicionará o pensamento ao raciocínio interno. Use-a quando for necessário um raciocínio complexo, comparar opções de suítes, decidir qual ferramenta acionar, ou verificar se sua resposta está seguindo todas as regras do sistema."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        2832,
+        832
+      ],
+      "id": "d45c1e2a-8b9d-4f3e-bc71-a9e87f2c3d1a",
+      "name": "Refletir"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "verificar_vagas": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calcular_estadia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "criar_reserva_hqbeds": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refletir": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Reserva": {
+      "main": [
+        [
+          {
+            "node": "Formatar Retorno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Agente Reserva",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2e5d8a51-babe-490a-97b8-bc3a56a2f5c0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7415e9235ece5189110114eb36bbaac162fc7eee18fdc01c0368c28339a042a1"
+  },
+  "id": "qKaMl6S8MO2jwE29FYEuW",
+  "tags": []
+}
